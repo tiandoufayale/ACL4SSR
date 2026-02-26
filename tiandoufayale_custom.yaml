@@ -78,7 +78,7 @@ dns:
   fake-ip-range: 198.18.0.1/16
   fake-ip-filter-mode: blacklist
   fake-ip-filter:
-    - "rule-set:CN_Domain,fakeip_filter_domain,game_cn_domain,bank_cn_domain,wechat_domain,ai_cn_domain,NetEaseMusic_domain,fcm_domain,alibaba_domain,media_cn_domain,xiaomi_domain,steam_cn_domain,pt_cn_domain,public-tracker_domain,115_domain,aliyun_domain,direct_domain,apple_cn_domain,apple_firmware_domain,iptv_domain,private_domain,cn_domain"
+    - "rule-set:CN_Domain,fakeip_filter_domain,game_cn_domain,wechat_domain,ai_cn_domain,xiaomi_domain,steam_cn_domain,direct_domain,private_domain,cn_domain"
     - "*.lan"
     - "*.local"
   default-nameserver: [223.5.5.5, 119.29.29.29]
@@ -98,7 +98,6 @@ proxy-groups:
   - {name: 🛑 广告拦截, type: select, proxies: [REJECT, DIRECT], icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/block.png"}
   - {name: 🐟 漏网之鱼, <<: *Proxy_first, icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/final.png"}
   - {name: ☁️ CloudFlareCDN, type: select, proxies: [🚀 节点选择, 🎯 全球直连, 🐟 漏网之鱼]}
-  - {name: YouTube, <<: *Proxy_first, icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/youtube.png"}
   - {name: 🚀 手动切换, type: select, include-all: true}
   - {name: ♻️ 自动选择, type: url-test, include-all: true, interval: 300, tolerance: 50}
   - {name: 🔯 故障转移, type: fallback, include-all: true, interval: 300}
@@ -122,7 +121,7 @@ rules:
   - RULE-SET,proxy_domain,🚀 节点选择
   - RULE-SET,ai!cn_domain,💬 Ai平台
   - RULE-SET,ai_domain,💬 Ai平台
-  - RULE-SET,ai_cn_domain,全球直连
+  - RULE-SET,ai_cn_domain,🎯 全球直连
   - RULE-SET,openai_domain,💬 Ai平台
   - RULE-SET,youtube_domain,📹 油管视频
   - RULE-SET,github_domain,🚀 节点选择
@@ -134,12 +133,11 @@ rules:
   - RULE-SET,private_ip,🎯 全球直连,no-resolve
   - RULE-SET,gfw_domain,🚀 节点选择
   - RULE-SET,geolocation-!cn,🚀 节点选择
-  - RULE-SET,steam_cn_domain,全球直连
-  - RULE-SET,steamcdn_domain,全球直连
-  - RULE-SET,steamcdn_ip,全球直连,no-resolve
-  - RULE-SET,direct_domain,全球直连
+  - RULE-SET,steam_cn_domain,🎯 全球直连
+  - RULE-SET,steamcdn_domain,🎯 全球直连
+  - RULE-SET,steamcdn_ip,🎯 全球直连,no-resolve
+  - RULE-SET,direct_domain,🎯 全球直连
   - RULE-SET,steam_domain,STEAM
-  - RULE-SET,youtube_domain,YouTube
   - MATCH,🐟 漏网之鱼
 
 # 规则集定义 (引用 lanlan123.yaml 来源)
@@ -175,5 +173,5 @@ rule-providers:
   steam_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/steam.mrs" }
   game_cn_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/category-games%40cn.mrs" }
   ai_cn_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/category-ai-cn.mrs" }
-  youtube_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/youtube.mrs" }
   direct_domain: { <<: *domain, url: "https://raw.githubusercontent.com/Lanlan13-14/Rules/refs/heads/main/rules/Domain/direct.mrs" }
+
