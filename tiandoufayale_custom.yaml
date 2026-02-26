@@ -89,7 +89,7 @@ dns:
 # 策略组
 proxy-groups:
   - {name: 🚀 节点选择, type: select, proxies: [♻️ 自动选择, 🔯 故障转移, 🇭🇰 香港节点, 🇸🇬 狮城节点, 🇯🇵 日本节点, 🇹🇼 台湾节点, 🇺🇲 美国节点, 🇰🇷 韩国节点, 🇲🇾 亚洲节点, 🇪🇺 欧洲节点, 🚀 手动切换, 🎯 全球直连], icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/select.png"}
-  
+  - {name: STEAM,type: select, <<: *Include_all, icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/steam.png"}
   - {name: 📲 电报消息, <<: *Proxy_first, icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/telegram.png"}
   - {name: 🐦 推特分流, <<: *Proxy_first, icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/twitter.png"}
   - {name: 💬 Ai平台, <<: *Include_all, icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/ai.png"}
@@ -98,7 +98,7 @@ proxy-groups:
   - {name: 🛑 广告拦截, type: select, proxies: [REJECT, DIRECT], icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/block.png"}
   - {name: 🐟 漏网之鱼, <<: *Proxy_first, icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/final.png"}
   - {name: ☁️ CloudFlareCDN, type: select, proxies: [🚀 节点选择, 🎯 全球直连, 🐟 漏网之鱼]}
-
+  - {name: YouTube, <<: *Proxy_first, icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/youtube.png"}
   - {name: 🚀 手动切换, type: select, include-all: true}
   - {name: ♻️ 自动选择, type: url-test, include-all: true, interval: 300, tolerance: 50}
   - {name: 🔯 故障转移, type: fallback, include-all: true, interval: 300}
@@ -119,27 +119,27 @@ rules:
   - RULE-SET,wechat_asn,🎯 全球直连,no-resolve
   - RULE-SET,speedtest_domain,🚀 节点选择
   - RULE-SET,Cloudflare_domain,☁️ CloudFlareCDN
-  - RULE-SET,Wise_domain,🚀 节点选择
-  - RULE-SET,paypal_domain,🚀 节点选择
   - RULE-SET,proxy_domain,🚀 节点选择
   - RULE-SET,ai!cn_domain,💬 Ai平台
   - RULE-SET,ai_domain,💬 Ai平台
+  - RULE-SET,ai_cn_domain,全球直连
   - RULE-SET,openai_domain,💬 Ai平台
   - RULE-SET,youtube_domain,📹 油管视频
   - RULE-SET,github_domain,🚀 节点选择
   - RULE-SET,telegram_domain,📲 电报消息
   - RULE-SET,telegram_ip,📲 电报消息,no-resolve
   - RULE-SET,twitter_ip,🐦 推特分流,no-resolve
-  - RULE-SET,netflix_domain,🚀 节点选择
-  - RULE-SET,disney_domain,🚀 节点选择
-  - RULE-SET,spotify_domain,🚀 节点选择
-  - RULE-SET,apple_cn_domain,🎯 全球直连
-  - RULE-SET,apple_domain,🎯 全球直连
   - RULE-SET,cn_domain,🎯 全球直连
   - RULE-SET,cn_ip,🎯 全球直连,no-resolve
   - RULE-SET,private_ip,🎯 全球直连,no-resolve
   - RULE-SET,gfw_domain,🚀 节点选择
   - RULE-SET,geolocation-!cn,🚀 节点选择
+  - RULE-SET,steam_cn_domain,全球直连
+  - RULE-SET,steamcdn_domain,全球直连
+  - RULE-SET,steamcdn_ip,全球直连,no-resolve
+  - RULE-SET,direct_domain,全球直连
+  - RULE-SET,steam_domain,STEAM
+  - RULE-SET,youtube_domain,YouTube
   - MATCH,🐟 漏网之鱼
 
 # 规则集定义 (引用 lanlan123.yaml 来源)
@@ -148,8 +148,9 @@ rule-anchor:
   domain: &domain {type: http, interval: 86400, behavior: domain, format: mrs}
 
 rule-providers:
-  banAd_domain: { <<: *domain, url: "https://raw.githubusercontent.com/Lanlan13-14/Rules/refs/heads/main/rules/Domain/banAd_mini.mrs" }
+  banAd_domain: { <<: *domain, url: "https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/Filters/AWAvenue-Ads-Rule-Clash.mrs" }
   wechat_domain: { <<: *domain, url: "https://raw.githubusercontent.com/Lanlan13-14/Rules/refs/heads/main/rules/Domain/WeChat.mrs" }
+  fakeip_filter_domain: { <<: *domain, url: "https://raw.githubusercontent.com/Lanlan13-14/Rules/refs/heads/main/rules/Domain/fakeip-filter.mrs" }
   speedtest_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/ookla-speedtest.mrs" }
   Cloudflare_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/cloudflare.mrs" }
   proxy_domain: { <<: *domain, url: "https://raw.githubusercontent.com/Lanlan13-14/Rules/refs/heads/main/rules/Domain/proxy.mrs" }
@@ -163,9 +164,16 @@ rule-providers:
   cn_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/cn.mrs" }
   gfw_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/gfw.mrs" }
   geolocation-!cn: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/geolocation-!cn.mrs" }
-  
   wechat_asn: { <<: *ip, url: "https://raw.githubusercontent.com/Lanlan13-14/Rules/refs/heads/main/rules/IP/AS132203.mrs" }
   telegram_ip: { <<: *ip, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/telegram.mrs" }
   twitter_ip: { <<: *ip, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/twitter.mrs" }
   cn_ip: { <<: *ip, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/cn.mrs" }
   private_ip: { <<: *ip, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/private.mrs" }
+  steam_cn_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/steam%40cn.mrs" }
+  steamcdn_domain: { <<: *domain, url: "https://raw.githubusercontent.com/Lanlan13-14/Rules/refs/heads/main/rules/Domain/Steam-domain.mrs" }
+  steamcdn_ip: { <<: *ip, url: "https://raw.githubusercontent.com/Lanlan13-14/Rules/refs/heads/main/rules/IP/steamCDN-ip.mrs" }
+  steam_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/steam.mrs" }
+  game_cn_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/category-games%40cn.mrs" }
+  ai_cn_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/category-ai-cn.mrs" }
+  youtube_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/youtube.mrs" }
+  direct_domain: { <<: *domain, url: "https://raw.githubusercontent.com/Lanlan13-14/Rules/refs/heads/main/rules/Domain/direct.mrs" }
