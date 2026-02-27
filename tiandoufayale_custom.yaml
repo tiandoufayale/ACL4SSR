@@ -137,7 +137,7 @@ rules:
   - RULE-SET,speedtest_domain,🚀 节点选择
   - RULE-SET,Cloudflare_domain,☁️ CloudFlareCDN
   - RULE-SET,proxy_domain,🚀 节点选择
-  - RULE-SET,ai_domain,💬 Ai 平台
+  - RULE-SET,ai_domain,💬 Ai平台
   - RULE-SET,ai_cn_domain,🎯 全球直连
   - RULE-SET,youtube_domain,📹 油管视频
   - RULE-SET,github_domain,🚀 节点选择
@@ -189,6 +189,7 @@ rule-providers:
   private_domain: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/private.mrs" }
   microsoft_cn_domain: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/microsoft-cn.mrs" }
   tld_proxy: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/tld-proxy.mrs" }
+
 
 
 
