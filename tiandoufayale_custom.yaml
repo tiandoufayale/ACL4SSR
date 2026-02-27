@@ -157,9 +157,7 @@ rules:
   - GEOSITE,category-social-media-!cn,🚀 节点选择
   - GEOSITE,category-ai-!cn,🚀 节点选择
   - GEOSITE,github,🚀 节点选择
-  - GEOSITE,steam,🚀 节点选择
   - GEOSITE,google-cn,🎯 全球直连
-  - GEOSITE,geosite:steam@cn,🎯 全球直连
   - GEOSITE,CN,🎯 全球直连
   - GEOIP,CN,🎯 全球直连,no-resolve
   - GEOIP,private,🎯 全球直连,no-resolve
@@ -197,6 +195,7 @@ rule-providers:
   private_domain: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/private.mrs" }
   microsoft_cn_domain: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/microsoft-cn.mrs" }
   tld_proxy: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/tld-proxy.mrs" }
+
 
 
 
