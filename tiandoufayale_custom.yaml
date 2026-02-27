@@ -89,17 +89,17 @@ dns:
     - 119.29.29.29
   
   proxy-server-nameserver:
-    - https://doh.pub/dns-query#direct
-    - https://dns.alidns.com/dns-query#direct
+    - https://doh.pub/dns-query
+    - https://dns.alidns.com/dns-query
   
   nameserver:
-    - https://dns.alidns.com/dns-query#direct
-    - https://doh.pub/dns-query#direct
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
   
   nameserver-policy:
     "geosite:geolocation-!cn":
-      - https://dns.google/dns-query#🚀 节点选择
-      - https://cloudflare-dns.com/dns-query#🚀 节点选择
+      - https://dns.google/dns-query
+      - https://cloudflare-dns.com/dns-query
   
   respect-rules: true
 # 策略组
@@ -189,6 +189,7 @@ rule-providers:
   private_domain: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/private.mrs" }
   microsoft_cn_domain: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/microsoft-cn.mrs" }
   tld_proxy: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/tld-proxy.mrs" }
+
 
 
 
