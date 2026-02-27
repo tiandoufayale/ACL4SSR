@@ -112,33 +112,28 @@ dns:
   respect-rules: true
 # 策略组
 proxy-groups:
-  # 🚀 节点选择（select 类型，不需要 url）
-  - {name: 🚀 节点选择，type: select, proxies: [♻️ 自动选择，🔯 故障转移，🇭 香港节点，🇸🇬 狮城节点，🇯🇵 日本节点，🇹🇼 台湾节点，🇺🇲 美国节点，🇰🇷 韩国节点，🇲🇾 亚洲节点，🇪🇺 欧洲节点，🚀 手动切换，🎯 全球直连], icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/select.png"}
-  # 功能分流组（select 类型，不需要 url）
-  - {name: STEAM, <<: *Proxy_first, icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/steam.png"}
-  - {name: 📲 电报消息，<<: *Proxy_first, icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/telegram.png"}
-  - {name: 🐦 推特分流，<<: *Proxy_first, icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/twitter.png"}
-  - {name: 💬 Ai 平台，<<: *Proxy_first, icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/ai.png"}
-  - {name: 📹 油管视频，<<: *Proxy_first, icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/youtube.png"}
-  # 基础控制组（select 类型，不需要 url）
-  - {name: 🎯 全球直连，type: select, proxies: [DIRECT, ♻️ 自动选择], icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/direct.png"}
-  - {name: 🛑 广告拦截，type: select, proxies: [REJECT, DIRECT], icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/block.png"}
-  - {name: 🐟 漏网之鱼，<<: *Proxy_first, icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/final.png"}
-  - {name: ☁️ CloudFlareCDN, type: select, proxies: [🚀 节点选择，🎯 全球直连，🐟 漏网之鱼]}
-  # 手动切换（select 类型，不需要 url）
-  - {name: 🚀 手动切换，type: select, include-all: true}
-  # ✅ 自动选择（url-test 类型，需要 url）
-  - {name: ♻️ 自动选择，type: url-test, include-all: true, url: "https://www.gstatic.com/generate_204", interval: 300, tolerance: 50}
-  # ✅ 故障转移（fallback 类型，需要 url）
-  - {name: 🔯 故障转移，type: fallback, include-all: true, url: "https://www.gstatic.com/generate_204", interval: 300}
-  - {name: 🇭🇰 香港节点, <<: *Urltest_Base, filter: "(?i)(港|HK|hk|Hong Kong|🇭)"}
-  - {name: 🇸🇬 狮城节点, <<: *Urltest_Base, filter: "(?i)(新 |🇸🇬|SG|Singapore)"}
-  - {name: 🇯 日本节点, <<: *Urltest_Base, filter: "(?i)(日本 |🇯🇵|JP|Japan)"}
-  - {name: 🇹🇼 台湾节点, <<: *Urltest_Base, filter: "(?i)(台|🇹🇼|TW|Taiwan)"}
-  - {name: 🇺🇲 美国节点, <<: *Urltest_Base, filter: "(?i)(美|🇺|🇺🇸|US|America|United States)"}
-  - {name: 🇰 韩国节点, <<: *Urltest_Base, filter: "(?i)(KR|Korea|KOR|首尔 | 韩)"}
-  - {name: 🇲🇾 亚洲节点, <<: *Urltest_Base, filter: "(?i)(马来 | 泰国 | 菲律宾 | 印度尼西亚|VN)"}
-  - {name: 🇪🇺 欧洲节点, <<: *Urltest_Base, filter: "(?i)(英国 | 德国 | 卢森堡 | 法国 | 俄罗斯|France|Deutschland|United Kingdom|Italy|Netherland)"}
+  - {name: 🚀 节点选择, type: select, proxies: [♻️ 自动选择, 🔯 故障转移, 🇭🇰 香港节点, 🇸🇬 狮城节点, 🇯🇵 日本节点, 🇹🇼 台湾节点, 🇺🇲 美国节点, 🇰🇷 韩国节点, 🇲🇾 亚洲节点, 🇪🇺 欧洲节点, 🚀 手动切换, 🎯 全球直连], icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/select.png"}
+  - {name: STEAM,type: select, <<: *Include_all, icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/steam.png"}
+  - {name: 📲 电报消息, <<: *Proxy_first, icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/telegram.png"}
+  - {name: 🐦 推特分流, <<: *Proxy_first, icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/twitter.png"}
+  - {name: 💬 Ai平台, type: select, proxies: [🇭🇰 香港节点, 🇸🇬 狮城节点, 🇯🇵 日本节点, 🇹🇼 台湾节点, 🇺🇲 美国节点, 🇰🇷 韩国节点, 🇲🇾 亚洲节点, 🇪🇺 欧洲节点, 🚀 手动切换], icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/ai.png"}
+  - {name: 📹 油管视频, <<: *Proxy_first, icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/youtube.png"}
+  - {name: 🎯 全球直连, type: select, proxies: [DIRECT, ♻️ 自动选择], icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/direct.png"}
+  - {name: 🛑 广告拦截, type: select, proxies: [REJECT, DIRECT], icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/block.png"}
+  - {name: 🐟 漏网之鱼, <<: *Proxy_first, icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/final.png"}
+  - {name: ☁️ CloudFlareCDN, type: select, proxies: [🚀 节点选择, 🎯 全球直连, 🐟 漏网之鱼]}
+  - {name: 🚀 手动切换, type: select, include-all: true}
+  - {name: ♻️ 自动选择, type: url-test, include-all: true, interval: 300, tolerance: 50}
+  - {name: 🔯 故障转移, type: fallback, include-all: true, interval: 300}
+
+  - {name: 🇭🇰 香港节点, type: select, include-all: true, filter: "(?i)(港|HK|hk|Hong Kong|🇭🇰)", icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/Hongkong.png"}
+  - {name: 🇸🇬 狮城节点, type: select, include-all: true, filter: "(?i)(新|🇸🇬|SG|Singapore)", icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/Singapore.png"}
+  - {name: 🇯🇵 日本节点, type: select, include-all: true, filter: "(?i)(日本|🇯🇵|JP|Japan)", icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/Japan.png"}
+  - {name: 🇹🇼 台湾节点, type: select, include-all: true, filter: "(?i)(台|🇹🇼|TW|Taiwan)", icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/Taiwan_China.png"}
+  - {name: 🇺🇲 美国节点, type: select, include-all: true, filter: "(?i)(美|🇺🇲|🇺🇸|US|America|United States)", icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/America.png"}
+  - {name: 🇰🇷 韩国节点, type: select, include-all: true, filter: "(?i)(KR|Korea|KOR|首尔|韩)"}
+  - {name: 🇲🇾 亚洲节点, type: select, include-all: true, filter: "(?i)(马来|泰国|菲律宾|印度尼西亚|VN)"}
+  - {name: 🇪🇺 欧洲节点, type: select, include-all: true, filter: "(?i)(英国|德国|卢森堡|法国|俄罗斯|France|Deutschland|United Kingdom|Italy|Netherland)"}
   rules:
   # 🔴 广告拦截
   - RULE-SET,banAd_domain,🛑 广告拦截
@@ -201,6 +196,7 @@ rule-providers:
   private_domain: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/private.mrs" }
   microsoft_cn_domain: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/microsoft-cn.mrs" }
   tld_proxy: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/tld-proxy.mrs" }
+
 
 
 
