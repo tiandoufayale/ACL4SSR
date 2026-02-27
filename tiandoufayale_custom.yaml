@@ -5,7 +5,15 @@
 Proxy_first: &Proxy_first {type: select, proxies: [🚀 节点选择, 🇭🇰 香港节点, 🇸🇬 狮城节点, 🇯🇵 日本节点, 🇹🇼 台湾节点, 🇺🇲 美国节点, 🇰🇷 韩国节点, 🇲🇾 亚洲节点, 🇪🇺 欧洲节点, ♻️ 自动选择, 🔯 故障转移, 🎯 全球直连]}
 Direct_first: &Direct_first {type: select, proxies: [🎯 全球直连, 🇭🇰 香港节点, 🇸🇬 狮城节点, 🇯🇵 日本节点, 🇹🇼 台湾节点, 🇺🇲 美国节点, ♻️ 自动选择]}
 Include_all: &Include_all {type: select, proxies: [🚀 节点选择, 🇭🇰 香港节点, 🇸🇬 狮城节点, 🇯🇵 日本节点, 🇹🇼 台湾节点, 🇺🇲 美国节点, 🇰🇷 韩国节点, 🇲🇾 亚洲节点, 🇪🇺 欧洲节点, ♻️ 自动选择, 🔯 故障转移, 🎯 全球直连], include-all: true, exclude-filter: "(?i)(DIRECT|直连)"}
-Urltest_Base: &Urltest_Base {type: url-test, include-all: true, tolerance: 20, interval: 300, max-failed-times: 1, hidden: true}
+Urltest_Base: &Urltest_Base {
+  type: url-test, 
+  include-all: true, 
+  url: "https://www.gstatic.com/generate_204",  # ✅ 补充到这里
+  interval: 300, 
+  tolerance: 50, 
+  max-failed-times: 1, 
+  hidden: true
+}
 # 外部机场通用配置锚点 
 PProviders: &PProviders {type: http, interval: 86400, health-check: {enable: true, url: 'https://www.gstatic.com/generate_204', interval: 300}, filter: '^(?!.*(拒绝 | 直连 | 群 | 邀请 | 返利 | 循环 | 官网 | 客服 | 网站 | 网址 | 获取 | 订阅 | 流量 | 到期 | 机场 | 下次 | 版本 | 官址 | 备用 | 过期 | 已用 | 联系 | 邮箱 | 工单 | 贩卖 | 通知 | 倒卖 | 防止 | 国内 | 地址 | 频道 | 无法 | 说明 | 提示 | 特别 | 访问 | 支持 | 教程 | 关注 | 更新 | 作者 | 加入 |USE|USED|TOTAL|EXPIRE|EMAIL|Panel|Channel|Author|traffic))'}
 
@@ -123,16 +131,17 @@ proxy-groups:
   - {name: ♻️ 自动选择，type: url-test, include-all: true, url: "https://www.gstatic.com/generate_204", interval: 300, tolerance: 50}
   # ✅ 故障转移（fallback 类型，需要 url）
   - {name: 🔯 故障转移，type: fallback, include-all: true, url: "https://www.gstatic.com/generate_204", interval: 300}
-  # ✅ 地区节点组（url-test 类型，需要 url）
-  - {name: 🇭🇰 香港节点，type: url-test, include-all: true, filter: "(?i)(港|HK|hk|Hong Kong|🇭)", url: "https://www.gstatic.com/generate_204", interval: 300, tolerance: 50}
-  - {name: 🇸🇬 狮城节点，type: url-test, include-all: true, filter: "(?i)(新 |🇸🇬|SG|Singapore)", url: "https://www.gstatic.com/generate_204", interval: 300, tolerance: 50}
-  - {name: 🇯🇵 日本节点，type: url-test, include-all: true, filter: "(?i)(日本 |🇯🇵|JP|Japan)", url: "https://www.gstatic.com/generate_204", interval: 300, tolerance: 50}
-  - {name: 🇹🇼 台湾节点，type: url-test, include-all: true, filter: "(?i)(台|🇹🇼|TW|Taiwan)", url: "https://www.gstatic.com/generate_204", interval: 300, tolerance: 50}
-  - {name: 🇺 美国节点，type: url-test, include-all: true, filter: "(?i)(美|🇺|🇺🇸|US|America|United States)", url: "https://www.gstatic.com/generate_204", interval: 300, tolerance: 50}
-  - {name: 🇰🇷 韩国节点，type: url-test, include-all: true, filter: "(?i)(KR|Korea|KOR|首尔 | 韩)", url: "https://www.gstatic.com/generate_204", interval: 300, tolerance: 50}
-  - {name: 🇲 亚洲节点，type: url-test, include-all: true, filter: "(?i)(马来 | 泰国 | 菲律宾 | 印度尼西亚|VN)", url: "https://www.gstatic.com/generate_204", interval: 300, tolerance: 50}
-  - {name: 🇪🇺 欧洲节点，type: url-test, include-all: true, filter: "(?i)(英国 | 德国 | 卢森堡 | 法国 | 俄罗斯|France|Deutschland|United Kingdom|Italy|Netherland)", url: "https://www.gstatic.com/generate_204", interval: 300, tolerance: 50}
-rules:
+ proxy-groups:
+  # ✅ 简洁写法：只写 name + 锚点 + filter
+  - {name: 🇭🇰 香港节点，type: url-test, <<: *Urltest_Base, filter: "(?i)(港|HK|hk|Hong Kong|🇭)"}
+  - {name: 🇸🇬 狮城节点，type: url-test, <<: *Urltest_Base, filter: "(?i)(新 |🇸🇬|SG|Singapore)"}
+  - {name: 🇯 日本节点，type: url-test, <<: *Urltest_Base, filter: "(?i)(日本 |🇯🇵|JP|Japan)"}
+  - {name: 🇹🇼 台湾节点，type: url-test, <<: *Urltest_Base, filter: "(?i)(台|🇹🇼|TW|Taiwan)"}
+  - {name: 🇺🇲 美国节点，type: url-test, <<: *Urltest_Base, filter: "(?i)(美|🇺|🇺🇸|US|America|United States)"}
+  - {name: 🇰 韩国节点，type: url-test, <<: *Urltest_Base, filter: "(?i)(KR|Korea|KOR|首尔 | 韩)"}
+  - {name: 🇲🇾 亚洲节点，type: url-test, <<: *Urltest_Base, filter: "(?i)(马来 | 泰国 | 菲律宾 | 印度尼西亚|VN)"}
+  - {name: 🇪🇺 欧洲节点，type: url-test, <<: *Urltest_Base, filter: "(?i)(英国 | 德国 | 卢森堡 | 法国 | 俄罗斯|France|Deutschland|United Kingdom|Italy|Netherland)"}
+  rules:
   # 🔴 广告拦截
   - RULE-SET,banAd_domain,🛑 广告拦截
   - RULE-SET,banAd2_domain,🛑 广告拦截
@@ -194,6 +203,7 @@ rule-providers:
   private_domain: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/private.mrs" }
   microsoft_cn_domain: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/microsoft-cn.mrs" }
   tld_proxy: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/tld-proxy.mrs" }
+
 
 
 
