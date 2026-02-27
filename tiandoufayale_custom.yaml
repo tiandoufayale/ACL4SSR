@@ -8,7 +8,7 @@ Include_all: &Include_all {type: select, proxies: [🚀 节点选择, 🇭🇰 �
 Urltest_Base: &Urltest_Base {
   type: url-test, 
   include-all: true, 
-  url: "https://www.gstatic.com/generate_204",  # ✅ 补充到这里
+  #url: "https://www.gstatic.com/generate_204",  # ✅ 补充到这里
   interval: 300, 
   tolerance: 50, 
   max-failed-times: 1, 
@@ -131,7 +131,6 @@ proxy-groups:
   - {name: ♻️ 自动选择，type: url-test, include-all: true, url: "https://www.gstatic.com/generate_204", interval: 300, tolerance: 50}
   # ✅ 故障转移（fallback 类型，需要 url）
   - {name: 🔯 故障转移，type: fallback, include-all: true, url: "https://www.gstatic.com/generate_204", interval: 300}
-  # ✅ 简洁写法：只写 name + 锚点 + filter
   - {name: 🇭🇰 香港节点, <<: *Urltest_Base, filter: "(?i)(港|HK|hk|Hong Kong|🇭)"}
   - {name: 🇸🇬 狮城节点, <<: *Urltest_Base, filter: "(?i)(新 |🇸🇬|SG|Singapore)"}
   - {name: 🇯 日本节点, <<: *Urltest_Base, filter: "(?i)(日本 |🇯🇵|JP|Japan)"}
@@ -202,6 +201,7 @@ rule-providers:
   private_domain: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/private.mrs" }
   microsoft_cn_domain: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/microsoft-cn.mrs" }
   tld_proxy: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/tld-proxy.mrs" }
+
 
 
 
