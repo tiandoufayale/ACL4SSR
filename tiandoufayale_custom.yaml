@@ -8,7 +8,7 @@ Include_all: &Include_all {type: select, proxies: [🚀 节点选择, 🇭🇰 �
 Urltest_Base: &Urltest_Base {
   type: url-test, 
   include-all: true, 
-  url: "https://www.gstatic.com/generate_204",  # ✅ 补充到这里
+  url: "https://www.gstatic.com/generate_204", 
   interval: 300, 
   tolerance: 50, 
   max-failed-times: 1, 
@@ -32,35 +32,10 @@ allow-lan: true
 unified-delay: true
 geodata-mode: true                   # ✅ 匹配 .metadb 格式
 tcp-concurrent: true
-geodata-loader: standard
-geo-auto-update: true
-geo-update-interval: 48
-geox-url:
-  geosite: "https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geosite.dat"
-  mmdb: "https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geoip-lite.metadb"
-  asn: "https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/GeoLite2-ASN.mmdb"
-
 find-process-mode: strict
 profile:
   store-selected: true
-  store-fake-ip: true                # ✅ 持久化
-
-sniffer:
-  enable: true
-  sniff:
-    HTTP: {ports: [80, 8080-8880], override-destination: true}
-    TLS: {ports: [443, 8443]}
-    QUIC: {ports: [443, 8443]}
-  skip-domain:
-    - "Mijia Cloud"
-    - "dlg.io.mi.com"
-    - "*.push.apple.com"
-    - "*.wechat.com"
-    - "*.qq.com"
-    - "*.oray.com"
-    - "*.sunlogin.net"
-    - "+.cn"                         # ✅ 补充：国内域名通常不需要嗅探
-
+  store-fake-ip: true                
 tun:
   enable: true
   stack: system      # 或 gvisor/mixed，根据内核支持选择
@@ -72,39 +47,34 @@ tun:
 
 dns:
   enable: true
-  listen: 127.0.0.1:1053  # 【优化 1】如果是本机使用，建议改为 127.0.0.1，防止局域网 DNS 劫持或滥用
-  ipv6: false             # 保持关闭，减少 IPv6 泄露风险
-  enhanced-mode: fake-ip  # 核心：开启 FakeIP，解决“第一次建连”泄露
+  listen: 127.0.0.1:1053  
+  ipv6: false             
+  enhanced-mode: fake-ip  
   fake-ip-range: 198.18.0.1/16
   fake-ip-filter-mode: blacklist
   fake-ip-filter:
     - rule-set:fakeip_filter_domain
     - rule-set:private_domain
     - rule-set:cn_domain
-    - rule-set:ai_cn_domain
-    - rule-set:games_cn_domain
-    - rule-set:steamcdn_domain
-    - rule-set:microsoft_cn_domain
-    - +.cn
-    - "*.lan"
-    - "*.local"
-    - +.in-addr.arpa
+    - +.lan
+    - +.local
     - +.arpa
+    - geosite:private      # 局域网域名不走 FakeIP
+    - geosite:category-education-cn # 教育网域名不走 FakeIP
+    - +.market.xiaomi.com  # 小米市场需要真实 IP
   
   # 【优化 2】默认 DNS 用于解析代理节点域名和国内域名
   default-nameserver:
-    - 223.5.5.5
-    - 119.29.29.29
-  
+    - https://223.5.5.5/dns-query
+    
   # 代理服务器域名的解析，必须走国内 DNS 确保能连上节点
   proxy-server-nameserver:
-    - 223.5.5.5
-    - 119.29.29.29
+    - https://dns.alidns.com/dns-query
 
   # 【优化 3】通用 DNS，国内流量走这里
   nameserver:
-    - https://dns.alidns.com/dns-query
-    - https://doh.pub/dns-query
+    - https://223.5.5.5/dns-query
+    - https://cloudflare-dns.com/dns-query
 
   # 【优化 4】关键：非国内流量强制走国外 DNS，且查询请求本身走代理 (#PROXY)
   # 这解决了“目标网站根据 DNS 判断地理位置”的问题
@@ -129,7 +99,7 @@ dns:
   respect-rules: true # 【核心】必须为 true，确保 DNS 请求本身也走代理规则，防止运营商看到你在查什么
 # 策略组
 proxy-groups:
-  - {name: 🚀 节点选择, type: select, proxies: [♻️ 自动选择, 🔯 故障转移, 🇭🇰 香港节点, 🇸🇬 狮城节点, 🇯🇵 日本节点, 🇹🇼 台湾节点, 🇺🇲 美国节点, 🇰🇷 韩国节点, 🇲🇾 亚洲节点, 🇪🇺 欧洲节点, 🚀 手动切换, 🎯 全球直连], icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/select.png"}
+  - {name: 🚀 节点选择, type: select,no-resolve: true,proxies: [♻️ 自动选择, 🔯 故障转移, 🇭🇰 香港节点, 🇸🇬 狮城节点, 🇯🇵 日本节点, 🇹🇼 台湾节点, 🇺🇲 美国节点, 🇰🇷 韩国节点, 🇲🇾 亚洲节点, 🇪🇺 欧洲节点, 🚀 手动切换, 🎯 全球直连], icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/select.png"}
   - {name: STEAM,type: select, <<: *Include_all, icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/steam.png"}
   - {name: 📲 电报消息, <<: *Proxy_first, icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/telegram.png"}
   - {name: 🐦 推特分流, <<: *Proxy_first, icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/twitter.png"}
@@ -196,8 +166,6 @@ rules:
   - GEOIP,telegram,🚀 节点选择,no-resolve
   - GEOIP,twitter,🚀 节点选择,no-resolve
   - GEOIP,google,🚀 节点选择,no-resolve
-  
-  
   - MATCH,🐟 漏网之鱼
 
 # 规则集定义 (引用 lanlan123.yaml 来源)
@@ -229,6 +197,7 @@ rule-providers:
   private_domain: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/private.mrs" }
   microsoft_cn_domain: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/microsoft-cn.mrs" }
   tld_proxy: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/tld-proxy.mrs" }
+
 
 
 
