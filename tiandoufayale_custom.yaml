@@ -8,7 +8,7 @@ Include_all: &Include_all {type: select, proxies: [🚀 节点选择, 🇭🇰 �
 Urltest_Base: &Urltest_Base {
   type: url-test, 
   include-all: true, 
-  #url: "https://www.gstatic.com/generate_204",  # ✅ 补充到这里
+  url: "https://www.gstatic.com/generate_204",  # ✅ 补充到这里
   interval: 300, 
   tolerance: 50, 
   max-failed-times: 1, 
@@ -123,14 +123,14 @@ proxy-groups:
   - {name: 🚀 手动切换, type: select, include-all: true}
   - {name: ♻️ 自动选择, type: url-test, include-all: true, interval: 300, tolerance: 50}
   - {name: 🔯 故障转移, type: fallback, include-all: true, interval: 300}
-  - {name: 🇭🇰 香港节点, type: select, include-all: true, filter: "(?i)(港|HK|hk|Hong Kong|🇭🇰)", icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/Hongkong.png"}
-  - {name: 🇸🇬 狮城节点, type: select, include-all: true, filter: "(?i)(新|🇸🇬|SG|Singapore)", icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/Singapore.png"}
-  - {name: 🇯🇵 日本节点, type: select, include-all: true, filter: "(?i)(日本|🇯🇵|JP|Japan)", icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/Japan.png"}
-  - {name: 🇹🇼 台湾节点, type: select, include-all: true, filter: "(?i)(台|🇹🇼|TW|Taiwan)", icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/Taiwan_China.png"}
-  - {name: 🇺🇲 美国节点, type: select, include-all: true, filter: "(?i)(美|🇺🇲|🇺🇸|US|America|United States)", icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/America.png"}
-  - {name: 🇰🇷 韩国节点, type: select, include-all: true, filter: "(?i)(KR|Korea|KOR|首尔|韩)"}
-  - {name: 🇲🇾 亚洲节点, type: select, include-all: true, filter: "(?i)(马来|泰国|菲律宾|印度尼西亚|VN)"}
-  - {name: 🇪🇺 欧洲节点, type: select, include-all: true, filter: "(?i)(英国|德国|卢森堡|法国|俄罗斯|France|Deutschland|United Kingdom|Italy|Netherland)"}
+  - {name: 🇭🇰 香港节点, <<: *Urltest_Base, include-all: true, filter: "(?i)(港|HK|hk|Hong Kong|🇭🇰)", icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/Hongkong.png"}
+  - {name: 🇸🇬 狮城节点, <<: *Urltest_Base, include-all: true, filter: "(?i)(新|🇸🇬|SG|Singapore)", icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/Singapore.png"}
+  - {name: 🇯🇵 日本节点, <<: *Urltest_Base, include-all: true, filter: "(?i)(日本|🇯🇵|JP|Japan)", icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/Japan.png"}
+  - {name: 🇹🇼 台湾节点, <<: *Urltest_Base, include-all: true, filter: "(?i)(台|🇹🇼|TW|Taiwan)", icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/Taiwan_China.png"}
+  - {name: 🇺🇲 美国节点, <<: *Urltest_Base, include-all: true, filter: "(?i)(美|🇺🇲|🇺🇸|US|America|United States)", icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/America.png"}
+  - {name: 🇰🇷 韩国节点, <<: *Urltest_Base, include-all: true, filter: "(?i)(KR|Korea|KOR|首尔|韩)"}
+  - {name: 🇲🇾 亚洲节点, <<: *Urltest_Base, include-all: true, filter: "(?i)(马来|泰国|菲律宾|印度尼西亚|VN)"}
+  - {name: 🇪🇺 欧洲节点, <<: *Urltest_Base, include-all: true, filter: "(?i)(英国|德国|卢森堡|法国|俄罗斯|France|Deutschland|United Kingdom|Italy|Netherland)"}
 rules:
   # 🔴 广告拦截
   - RULE-SET,banAd_domain,🛑 广告拦截
@@ -193,6 +193,7 @@ rule-providers:
   private_domain: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/private.mrs" }
   microsoft_cn_domain: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/microsoft-cn.mrs" }
   tld_proxy: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/tld-proxy.mrs" }
+
 
 
 
