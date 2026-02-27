@@ -1,50 +1,22 @@
-# tiandoufayale's Clash Configuration Template
-# Reference: lanlan123.yaml
-# Use this link in your Subconverter 'Remote Config'
-
-# 锚点区 (用于快速引用组配置)
-Proxy_first: &Proxy_first {type: select, proxies: [🚀 节点选择, 🇭🇰 香港节点, 🇸🇬 狮城节点, 🇯🇵 日本节点, 🇹🇼 台湾节点, 🇺🇲 美国节点, 🇰🇷 韩国节点, 🇲🇾 亚洲节点, 🇪🇺 欧洲节点, ♻️ 自动选择, 🔯 故障转移, 🎯 全球直连]}
-Direct_first: &Direct_first {type: select, proxies: [🎯 全球直连, 🇭🇰 香港节点, 🇸🇬 狮城节点, 🇯🇵 日本节点, 🇹🇼 台湾节点, 🇺🇲 美国节点, ♻️ 自动选择]}
-Include_all: &Include_all {type: select, proxies: [🚀 节点选择, 🇭🇰 香港节点, 🇸🇬 狮城节点, 🇯🇵 日本节点, 🇹🇼 台湾节点, 🇺🇲 美国节点, 🇰🇷 韩国节点, 🇲🇾 亚洲节点, 🇪🇺 欧洲节点, ♻️ 自动选择, 🔯 故障转移, 🎯 全球直连], include-all: true, exclude-filter: "(?i)(DIRECT|直连)"}
-Urltest_Base: &Urltest_Base {type: url-test, include-all: true, tolerance: 20, interval: 300, max-failed-times: 1, hidden: true}
-
-# 外部机场通用配置锚点
-PProviders: &PProviders {type: http, interval: 86400, health-check: {enable: true, url: 'https://www.gstatic.com/generate_204', interval: 300}, filter: '^(?!.*(拒绝|直连|群|邀请|返利|循环|官网|客服|网站|网址|获取|订阅|流量|到期|机场|下次|版本|官址|备用|过期|已用|联系|邮箱|工单|贩卖|通知|倒卖|防止|国内|地址|频道|无法|说明|提示|特别|访问|支持|教程|关注|更新|作者|加入|USE|USED|TOTAL|EXPIRE|EMAIL|Panel|Channel|Author|traffic))'}
-
-# 外部机场订阅（Subconverter 会合并这些订阅和 Worker 的节点）
-proxy-providers:
-  Airport_01:
-    <<: *PProviders
-    proxy: "🔯 故障转移"
-    override:
-      additional-prefix: '[机场1]'
-      skip-cert-verify: true
-      udp: true
-
 # 全局配置
 mixed-port: 7890
-ipv6: true
+ipv6: false                          # ✅ 关闭以防泄漏
 allow-lan: true
 unified-delay: true
-geodata-mode: false
+geodata-mode: true                   # ✅ 匹配 .metadb 格式
+tcp-concurrent: true
 geodata-loader: standard
 geo-auto-update: true
 geo-update-interval: 48
 geox-url:
   geosite: "https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geosite.dat"
   mmdb: "https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geoip-lite.metadb"
-  geoip: "https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geoip-lite.dat"
   asn: "https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/GeoLite2-ASN.mmdb"
-
-external-controller: 0.0.0.0:9090
-secret: ""
-external-ui: ui
-external-ui-url: "https://github.com/Zephyruso/zashboard/archive/refs/heads/gh-pages.zip"
 
 find-process-mode: strict
 profile:
   store-selected: true
-  store-fake-ip: false
+  store-fake-ip: true                # ✅ 持久化
 
 sniffer:
   enable: true
@@ -60,31 +32,67 @@ sniffer:
     - "*.qq.com"
     - "*.oray.com"
     - "*.sunlogin.net"
+    - "+.cn"                         # ✅ 补充：国内域名通常不需要嗅探
+
+# 外部机场通用配置锚点 (修正了 URL 空格)
+PProviders: &PProviders {type: http, interval: 86400, health-check: {enable: true, url: 'https://www.gstatic.com/generate_204', interval: 300}, filter: '^(?!.*(拒绝 | 直连 | 群 | 邀请 | 返利 | 循环 | 官网 | 客服 | 网站 | 网址 | 获取 | 订阅 | 流量 | 到期 | 机场 | 下次 | 版本 | 官址 | 备用 | 过期 | 已用 | 联系 | 邮箱 | 工单 | 贩卖 | 通知 | 倒卖 | 防止 | 国内 | 地址 | 频道 | 无法 | 说明 | 提示 | 特别 | 访问 | 支持 | 教程 | 关注 | 更新 | 作者 | 加入 |USE|USED|TOTAL|EXPIRE|EMAIL|Panel|Channel|Author|traffic))'}
+
+proxy-providers:
+  Airport_01:
+    <<: *PProviders
+    proxy: "🚀 节点选择"
+    override:
+      additional-prefix: '[机场 1]'
+      skip-cert-verify: true
+      udp: true
 
 tun:
   enable: true
-  stack: gvisor
-  mtu: 9000
-  auto-route: true
+  stack: system      # 或 gvisor/mixed，根据内核支持选择
+  auto-route: true   # 自动接管系统路由
   auto-detect-interface: true
+  dns-hijack:
+    - any:53         # 劫持所有 DNS 请求，强制走 Clash
+  strict-route: true # 🔒 严格模式：非代理流量直接丢弃（高级防泄漏）
 
-# DNS 模块 (支持 Fake-IP 与分流)
 dns:
   enable: true
   listen: 0.0.0.0:1053
-  ipv6: true
+  ipv6: false
   enhanced-mode: fake-ip
   fake-ip-range: 198.18.0.1/16
   fake-ip-filter-mode: blacklist
   fake-ip-filter:
-    - "rule-set:fakeip_filter_domain,game_cn_domain,wechat_domain,ai_cn_domain,steam_cn_domain,direct_domain,private_domain,cn_domain"
+    - "rule-set:fakeip_filter_domain"
+    - "rule-set:private_domain"
+    - "rule-set:cn_domain"
+    - "rule-set:ai_cn_domain"
+    - "rule-set:games_cn_domain"
+    - "rule-set:steamcdn_domain"
+    - "rule-set:microsoft_cn_domain"
+    - "+.cn"
     - "*.lan"
     - "*.local"
-  default-nameserver: [223.5.5.5, 119.29.29.29]
-  proxy-server-nameserver: [https://doh.pub/dns-query, https://dns.alidns.com/dns-query]
-  direct-nameserver: [https://doh.pub/dns-query, https://dns.alidns.com/dns-query]
-  nameserver: [https://dns.google/dns-query, https://cloudflare-dns.com/dns-query]
-
+    - "+.in-addr.arpa"
+  
+  default-nameserver:
+    - 223.5.5.5
+    - 119.29.29.29
+  
+  proxy-server-nameserver:
+    - https://doh.pub/dns-query#direct
+    - https://dns.alidns.com/dns-query#direct
+  
+  nameserver:
+    - https://dns.alidns.com/dns-query#direct
+    - https://doh.pub/dns-query#direct
+  
+  nameserver-policy:
+    "geosite:geolocation-!cn":
+      - https://dns.google/dns-query#🚀 节点选择
+      - https://cloudflare-dns.com/dns-query#🚀 节点选择
+  
+  respect-rules: true
 # 策略组
 proxy-groups:
   - {name: 🚀 节点选择, type: select, proxies: [♻️ 自动选择, 🔯 故障转移, 🇭🇰 香港节点, 🇸🇬 狮城节点, 🇯🇵 日本节点, 🇹🇼 台湾节点, 🇺🇲 美国节点, 🇰🇷 韩国节点, 🇲🇾 亚洲节点, 🇪🇺 欧洲节点, 🚀 手动切换, 🎯 全球直连], icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/select.png"}
@@ -110,34 +118,37 @@ proxy-groups:
   - {name: 🇲🇾 亚洲节点, type: select, include-all: true, filter: "(?i)(马来|泰国|菲律宾|印度尼西亚|VN)"}
   - {name: 🇪🇺 欧洲节点, type: select, include-all: true, filter: "(?i)(英国|德国|卢森堡|法国|俄罗斯|France|Deutschland|United Kingdom|Italy|Netherland)"}
 
-# 分流规则
 rules:
+  # 🔴 广告拦截（最优先）
   - RULE-SET,banAd_domain,🛑 广告拦截
   - RULE-SET,banAd2_domain,🛑 广告拦截
-  - RULE-SET,wechat_domain,🎯 全球直连
-  - RULE-SET,wechat_asn,🎯 全球直连,no-resolve
+  
+  # 🟡 域名规则（在 IP 规则之前）
+  - RULE-SET,private_domain,🎯 全球直连
   - RULE-SET,speedtest_domain,🚀 节点选择
   - RULE-SET,Cloudflare_domain,☁️ CloudFlareCDN
   - RULE-SET,proxy_domain,🚀 节点选择
-  - RULE-SET,ai!cn_domain,💬 Ai平台
-  - RULE-SET,ai_domain,💬 Ai平台
+  - RULE-SET,ai_domain,💬 Ai 平台
   - RULE-SET,ai_cn_domain,🎯 全球直连
-  - RULE-SET,openai_domain,💬 Ai平台
   - RULE-SET,youtube_domain,📹 油管视频
   - RULE-SET,github_domain,🚀 节点选择
-  - RULE-SET,telegram_domain,📲 电报消息
+  - RULE-SET,cn_domain,🎯 全球直连
+  - RULE-SET,gfw_domain,🚀 节点选择
+  - RULE-SET,games_cn_domain,🎯 全球直连
+  - RULE-SET,steamcdn_domain,🎯 全球直连
+  - RULE-SET,microsoft_cn_domain,🎯 全球直连
+  - RULE-SET,steam_domain,STEAM
+  - RULE-SET,tld_proxy,🚀 节点选择
+  
+  # 🟢 IP 规则（全部加 no-resolve）
   - RULE-SET,telegram_ip,📲 电报消息,no-resolve
   - RULE-SET,twitter_ip,🐦 推特分流,no-resolve
-  - RULE-SET,cn_domain,🎯 全球直连
   - RULE-SET,cn_ip,🎯 全球直连,no-resolve
   - RULE-SET,private_ip,🎯 全球直连,no-resolve
-  - RULE-SET,gfw_domain,🚀 节点选择
-  - RULE-SET,geolocation-!cn,🚀 节点选择
-  - RULE-SET,steam_cn_domain,🎯 全球直连
-  - RULE-SET,steamcdn_domain,🎯 全球直连
   - RULE-SET,steamcdn_ip,🎯 全球直连,no-resolve
-  - RULE-SET,direct_domain,🎯 全球直连
-  - RULE-SET,steam_domain,STEAM
+  
+  # 🔵 兜底规则
+  - GEOIP,CN,🎯 全球直连,no-resolve
   - MATCH,🐟 漏网之鱼
 
 # 规则集定义 (引用 lanlan123.yaml 来源)
@@ -148,34 +159,28 @@ rule-anchor:
 rule-providers:
   banAd_domain: { <<: *domain, url: "https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/Filters/AWAvenue-Ads-Rule-Clash.mrs" }
   banAd2_domain: { <<: *domain, url: "https://raw.githubusercontent.com/privacy-protection-tools/anti-ad.github.io/master/docs/mihomo.mrs" }
-  wechat_domain: { <<: *domain, url: "https://raw.githubusercontent.com/Lanlan13-14/Rules/refs/heads/main/rules/Domain/WeChat.mrs" }
-  fakeip_filter_domain: { <<: *domain, url: "https://raw.githubusercontent.com/Lanlan13-14/Rules/refs/heads/main/rules/Domain/fakeip-filter.mrs" }
+  fakeip_filter_domain: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/fakeip-filter-lite.mrs" }
   speedtest_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/ookla-speedtest.mrs" }
-  Cloudflare_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/cloudflare.mrs" }
-  proxy_domain: { <<: *domain, url: "https://raw.githubusercontent.com/Lanlan13-14/Rules/refs/heads/main/rules/Domain/proxy.mrs" }
-  ai!cn_domain: { <<: *domain, url: "https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-ai-!cn.mrs" }
-  ai_domain: { <<: *domain, url: "https://raw.githubusercontent.com/Lanlan13-14/Rules/refs/heads/main/rules/Domain/ai.mrs" }
-  openai_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/openai.mrs" }
-  youtube_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/youtube.mrs" }
+  Cloudflare_domain: { <<: *domain, url: "https://github.com/Loyalsoldier/geoip/raw/refs/heads/release/mrs/cloudflare.mrs" }
+  proxy_domain: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/proxy.mrs" }
+  ai_domain: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/ai.mrs" }
+  youtube_domain: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/youtube.mrs" }
   github_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/github.mrs" }
-  telegram_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/telegram.mrs" }
-  netflix_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/netflix.mrs" }
-  cn_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/cn.mrs" }
-  gfw_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/gfw.mrs" }
-  geolocation-!cn: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/geolocation-!cn.mrs" }
-  wechat_asn: { <<: *ip, url: "https://raw.githubusercontent.com/Lanlan13-14/Rules/refs/heads/main/rules/IP/AS132203.mrs" }
-  telegram_ip: { <<: *ip, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/telegram.mrs" }
+  cn_domain: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/cn.mrs" }
+  gfw_domain: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/gfw.mrs" }
+  telegram_ip: { <<: *ip, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/telegramip.mrs" }
   twitter_ip: { <<: *ip, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/twitter.mrs" }
-  cn_ip: { <<: *ip, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/cn.mrs" }
-  private_ip: { <<: *ip, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/private.mrs" }
-  steam_cn_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/steam%40cn.mrs" }
+  cn_ip: { <<: *ip, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/cnip.mrs" }
+  private_ip: { <<: *ip, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/privateip.mrs" }
+  games_cn_domain: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/games-cn.mrs" }
   steamcdn_domain: { <<: *domain, url: "https://raw.githubusercontent.com/Lanlan13-14/Rules/refs/heads/main/rules/Domain/Steam-domain.mrs" }
   steamcdn_ip: { <<: *ip, url: "https://raw.githubusercontent.com/Lanlan13-14/Rules/refs/heads/main/rules/IP/steamCDN-ip.mrs" }
   steam_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/steam.mrs" }
-  game_cn_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/category-games%40cn.mrs" }
   ai_cn_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/category-ai-cn.mrs" }
-  direct_domain: { <<: *domain, url: "https://raw.githubusercontent.com/Lanlan13-14/Rules/refs/heads/main/rules/Domain/direct.mrs" }
-  private_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/private.mrs" }
+  private_domain: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/private.mrs" }
+  microsoft_cn_domain: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/microsoft-cn.mrs" }
+  tld_proxy: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/tld-proxy.mrs" }
+
 
 
 
