@@ -72,42 +72,61 @@ tun:
 
 dns:
   enable: true
-  listen: 0.0.0.0:1053
-  ipv6: false
-  enhanced-mode: fake-ip
+  listen: 127.0.0.1:1053  # 【优化 1】如果是本机使用，建议改为 127.0.0.1，防止局域网 DNS 劫持或滥用
+  ipv6: false             # 保持关闭，减少 IPv6 泄露风险
+  enhanced-mode: fake-ip  # 核心：开启 FakeIP，解决“第一次建连”泄露
   fake-ip-range: 198.18.0.1/16
   fake-ip-filter-mode: blacklist
   fake-ip-filter:
-    - "rule-set:fakeip_filter_domain"
-    - "rule-set:private_domain"
-    - "rule-set:cn_domain"
-    - "rule-set:ai_cn_domain"
-    - "rule-set:games_cn_domain"
-    - "rule-set:steamcdn_domain"
-    - "rule-set:microsoft_cn_domain"
-    - "+.cn"
+    - rule-set:fakeip_filter_domain
+    - rule-set:private_domain
+    - rule-set:cn_domain
+    - rule-set:ai_cn_domain
+    - rule-set:games_cn_domain
+    - rule-set:steamcdn_domain
+    - rule-set:microsoft_cn_domain
+    - +.cn
     - "*.lan"
     - "*.local"
-    - "+.in-addr.arpa"
+    - +.in-addr.arpa
+    - +.arpa
   
+  # 【优化 2】默认 DNS 用于解析代理节点域名和国内域名
   default-nameserver:
     - 223.5.5.5
     - 119.29.29.29
   
+  # 代理服务器域名的解析，必须走国内 DNS 确保能连上节点
   proxy-server-nameserver:
-    - https://doh.pub/dns-query
-    - https://dns.alidns.com/dns-query
-  
+    - 223.5.5.5
+    - 119.29.29.29
+
+  # 【优化 3】通用 DNS，国内流量走这里
   nameserver:
     - https://dns.alidns.com/dns-query
     - https://doh.pub/dns-query
-  
+
+  # 【优化 4】关键：非国内流量强制走国外 DNS，且查询请求本身走代理 (#PROXY)
+  # 这解决了“目标网站根据 DNS 判断地理位置”的问题
   nameserver-policy:
-    "geosite:geolocation-!cn":
-      - https://8.8.8.8/dns-query#PROXY&ecs=120.76.0.0/14&ecs-override=true
-      - https://cloudflare-dns.com/dns-query
-  
-  respect-rules: true
+    "geosite:geolocation-!cn": 
+      - "https://8.8.8.8/dns-query"
+      - "https://1.1.1.1/dns-query"
+
+  # 【优化 5】备用 DNS，防止主 DNS 挂掉，但必须过滤掉国内 IP 避免污染
+  fallback:
+    - https://8.8.8.8/dns-query
+    - https://1.1.1.1/dns-query
+  fallback-filter:
+    geoip: true
+    geoip-code: CN
+    ipcidr:
+      - 240.0.0.0/4
+    domain:
+      - +.google.com
+      - +.facebook.com
+      - +.youtube.com
+  respect-rules: true # 【核心】必须为 true，确保 DNS 请求本身也走代理规则，防止运营商看到你在查什么
 # 策略组
 proxy-groups:
   - {name: 🚀 节点选择, type: select, proxies: [♻️ 自动选择, 🔯 故障转移, 🇭🇰 香港节点, 🇸🇬 狮城节点, 🇯🇵 日本节点, 🇹🇼 台湾节点, 🇺🇲 美国节点, 🇰🇷 韩国节点, 🇲🇾 亚洲节点, 🇪🇺 欧洲节点, 🚀 手动切换, 🎯 全球直连], icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/select.png"}
@@ -210,6 +229,7 @@ rule-providers:
   private_domain: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/private.mrs" }
   microsoft_cn_domain: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/microsoft-cn.mrs" }
   tld_proxy: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/tld-proxy.mrs" }
+
 
 
 
