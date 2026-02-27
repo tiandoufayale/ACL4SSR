@@ -128,11 +128,11 @@ proxy-groups:
   - {name: 🇪🇺 欧洲节点, type: select, include-all: true, filter: "(?i)(英国|德国|卢森堡|法国|俄罗斯|France|Deutschland|United Kingdom|Italy|Netherland)"}
 
 rules:
-  # 🔴 广告拦截（最优先）
+  # 🔴 广告拦截
   - RULE-SET,banAd_domain,🛑 广告拦截
   - RULE-SET,banAd2_domain,🛑 广告拦截
   
-  # 🟡 域名规则（在 IP 规则之前）
+  # 🟡 域名规则
   - RULE-SET,private_domain,🎯 全球直连
   - RULE-SET,speedtest_domain,🚀 节点选择
   - RULE-SET,Cloudflare_domain,☁️ CloudFlareCDN
@@ -156,7 +156,7 @@ rules:
   - RULE-SET,private_ip,🎯 全球直连,no-resolve
   - RULE-SET,steamcdn_ip,🎯 全球直连,no-resolve
   
-  # 🔵 兜底规则
+  # 🔵 兜底
   - GEOIP,CN,🎯 全球直连,no-resolve
   - MATCH,🐟 漏网之鱼
 
@@ -189,6 +189,7 @@ rule-providers:
   private_domain: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/private.mrs" }
   microsoft_cn_domain: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/microsoft-cn.mrs" }
   tld_proxy: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/tld-proxy.mrs" }
+
 
 
 
