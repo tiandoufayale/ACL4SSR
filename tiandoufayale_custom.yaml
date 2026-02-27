@@ -1,3 +1,22 @@
+# tiandoufayale's Clash Configuration Template
+# Use this link in your Subconverter 'Remote Config'
+
+# 锚点区 (用于快速引用组配置)
+Proxy_first: &Proxy_first {type: select, proxies: [🚀 节点选择, 🇭🇰 香港节点, 🇸🇬 狮城节点, 🇯🇵 日本节点, 🇹🇼 台湾节点, 🇺🇲 美国节点, 🇰🇷 韩国节点, 🇲🇾 亚洲节点, 🇪🇺 欧洲节点, ♻️ 自动选择, 🔯 故障转移, 🎯 全球直连]}
+Direct_first: &Direct_first {type: select, proxies: [🎯 全球直连, 🇭🇰 香港节点, 🇸🇬 狮城节点, 🇯🇵 日本节点, 🇹🇼 台湾节点, 🇺🇲 美国节点, ♻️ 自动选择]}
+Include_all: &Include_all {type: select, proxies: [🚀 节点选择, 🇭🇰 香港节点, 🇸🇬 狮城节点, 🇯🇵 日本节点, 🇹🇼 台湾节点, 🇺🇲 美国节点, 🇰🇷 韩国节点, 🇲🇾 亚洲节点, 🇪🇺 欧洲节点, ♻️ 自动选择, 🔯 故障转移, 🎯 全球直连], include-all: true, exclude-filter: "(?i)(DIRECT|直连)"}
+Urltest_Base: &Urltest_Base {type: url-test, include-all: true, tolerance: 20, interval: 300, max-failed-times: 1, hidden: true}
+# 外部机场通用配置锚点 
+PProviders: &PProviders {type: http, interval: 86400, health-check: {enable: true, url: 'https://www.gstatic.com/generate_204', interval: 300}, filter: '^(?!.*(拒绝 | 直连 | 群 | 邀请 | 返利 | 循环 | 官网 | 客服 | 网站 | 网址 | 获取 | 订阅 | 流量 | 到期 | 机场 | 下次 | 版本 | 官址 | 备用 | 过期 | 已用 | 联系 | 邮箱 | 工单 | 贩卖 | 通知 | 倒卖 | 防止 | 国内 | 地址 | 频道 | 无法 | 说明 | 提示 | 特别 | 访问 | 支持 | 教程 | 关注 | 更新 | 作者 | 加入 |USE|USED|TOTAL|EXPIRE|EMAIL|Panel|Channel|Author|traffic))'}
+
+proxy-providers:
+  Airport_01:
+    <<: *PProviders
+    proxy: "🚀 节点选择"
+    override:
+      additional-prefix: '[机场 1]'
+      skip-cert-verify: true
+
 # 全局配置
 mixed-port: 7890
 ipv6: false                          # ✅ 关闭以防泄漏
@@ -34,17 +53,7 @@ sniffer:
     - "*.sunlogin.net"
     - "+.cn"                         # ✅ 补充：国内域名通常不需要嗅探
 
-# 外部机场通用配置锚点 (修正了 URL 空格)
-PProviders: &PProviders {type: http, interval: 86400, health-check: {enable: true, url: 'https://www.gstatic.com/generate_204', interval: 300}, filter: '^(?!.*(拒绝 | 直连 | 群 | 邀请 | 返利 | 循环 | 官网 | 客服 | 网站 | 网址 | 获取 | 订阅 | 流量 | 到期 | 机场 | 下次 | 版本 | 官址 | 备用 | 过期 | 已用 | 联系 | 邮箱 | 工单 | 贩卖 | 通知 | 倒卖 | 防止 | 国内 | 地址 | 频道 | 无法 | 说明 | 提示 | 特别 | 访问 | 支持 | 教程 | 关注 | 更新 | 作者 | 加入 |USE|USED|TOTAL|EXPIRE|EMAIL|Panel|Channel|Author|traffic))'}
 
-proxy-providers:
-  Airport_01:
-    <<: *PProviders
-    proxy: "🚀 节点选择"
-    override:
-      additional-prefix: '[机场 1]'
-      skip-cert-verify: true
-      udp: true
 
 tun:
   enable: true
@@ -180,6 +189,7 @@ rule-providers:
   private_domain: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/private.mrs" }
   microsoft_cn_domain: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/microsoft-cn.mrs" }
   tld_proxy: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/tld-proxy.mrs" }
+
 
 
 
