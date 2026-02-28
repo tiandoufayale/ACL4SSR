@@ -56,7 +56,6 @@ dns:
   enhanced-mode: fake-ip  
   fake-ip-range: 198.18.0.1/16
   fake-ip-range6: fdfe:dcba:9876::1/64
-  fake-ip-filter-mode: rule
   fake-ip-filter-mode: blacklist 
   fake-ip-filter:
     - +.lan
@@ -69,7 +68,7 @@ dns:
     - ntp.*.com
     - +.stun.*.* 
   default-nameserver:
-    - 223.5.5.5
+    - tls://223.5.5.5
     
     
   # 代理服务器域名的解析，必须走国内 DNS 确保能连上节点
@@ -77,12 +76,13 @@ dns:
     - tls://dns.alidns.com
 
   nameserver:
-
     - tls://dns.alidns.com
+    - dot.pub
          
   nameserver-policy:
-    "geosite:private": 
-    - tls://dns.alidns.com
+    "geosite:geolocation-!cn":
+    - tls://one.one.one.one
+    - tls://dns.google
     "geosite:cn":
     - tls://dns.alidns.com
 
@@ -199,6 +199,7 @@ rule-providers:
   private_domain: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/private.mrs" }
   microsoft_cn_domain: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/microsoft-cn.mrs" }
   tld_proxy: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/tld-proxy.mrs" }
+
 
 
 
