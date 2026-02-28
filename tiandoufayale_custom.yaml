@@ -73,22 +73,22 @@ dns:
     
   # 代理服务器域名的解析，必须走国内 DNS 确保能连上节点
   proxy-server-nameserver:
-    - tls://dns.alidns.com
+    - https://dns.alidns.com/dns-query
 
   nameserver:
-    - tls://dns.alidns.com
-    - dot.pub
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
          
   nameserver-policy:
     "geosite:geolocation-!cn":
-    - tls://one.one.one.one
-    - tls://dns.google
+    - https://https://cloudflare-dns.com/dns-query
+    - https://dns.google/dns-query
     "geosite:cn":
-    - tls://dns.alidns.com
+    - https://dns.alidns.com/dns-query
 
   fallback:
-    - tls://one.one.one.one
-    - tls://dns.google
+    - https://https://cloudflare-dns.com/dns-query
+    - https://dns.google/dns-query
 
   fallback-filter:
     geoip: true
@@ -199,6 +199,7 @@ rule-providers:
   private_domain: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/private.mrs" }
   microsoft_cn_domain: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/microsoft-cn.mrs" }
   tld_proxy: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/tld-proxy.mrs" }
+
 
 
 
