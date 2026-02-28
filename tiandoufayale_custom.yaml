@@ -70,7 +70,7 @@ dns:
   
   # 【优化 2】默认 DNS 用于解析代理节点域名和国内域名
   default-nameserver:
-    - tls://dns.alidns.com
+    - quic://dns.alidns.com:853
     
     
   # 代理服务器域名的解析，必须走国内 DNS 确保能连上节点
@@ -200,6 +200,7 @@ rule-providers:
   private_domain: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/private.mrs" }
   microsoft_cn_domain: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/microsoft-cn.mrs" }
   tld_proxy: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/tld-proxy.mrs" }
+
 
 
 
