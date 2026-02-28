@@ -57,30 +57,28 @@ dns:
   fake-ip-range: 198.18.0.1/16
   fake-ip-range6: fdfe:dcba:9876::1/64
   fake-ip-filter-mode: rule
+  fake-ip-filter-mode: blacklist 
   fake-ip-filter:
-    - rule-set:fakeip_filter_domain
-    - rule-set:private_domain
-    - rule-set:cn_domain
     - +.lan
     - +.local
     - +.arpa
-    - geosite:private      
-    - geosite:category-education-cn 
-    - +.market.xiaomi.com 
-  
-  # 【优化 2】默认 DNS 用于解析代理节点域名和国内域名
+    - +.internal
+    - +.localhost
+    - +.market.xiaomi.com
+    - time.*.com
+    - ntp.*.com
+    - +.stun.*.* 
   default-nameserver:
-    - quic://dns.alidns.com:853
+    - 223.5.5.5
     
     
   # 代理服务器域名的解析，必须走国内 DNS 确保能连上节点
   proxy-server-nameserver:
-    - quic://dns.alidns.com:853
+    - tls://dns.alidns.com
 
   nameserver:
-    - tls://one.one.one.one
-    - tls://dns.google
-    - https://8.8.8.8/dns-query
+
+    - tls://dns.alidns.com
          
   nameserver-policy:
     "geosite:private": 
@@ -89,8 +87,9 @@ dns:
     - tls://dns.alidns.com
 
   fallback:
-    - https://8.8.8.8/dns-query
-    - https://1.1.1.1/dns-query
+    - tls://one.one.one.one
+    - tls://dns.google
+
   fallback-filter:
     geoip: true
     geoip-code: CN
@@ -200,6 +199,7 @@ rule-providers:
   private_domain: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/private.mrs" }
   microsoft_cn_domain: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/microsoft-cn.mrs" }
   tld_proxy: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/tld-proxy.mrs" }
+
 
 
 
