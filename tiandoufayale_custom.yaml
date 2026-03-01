@@ -1,7 +1,6 @@
 # tiandoufayale's Clash Configuration Template
 # Use this link in your Subconverter 'Remote Config'
 
-# 锚点区 (用于快速引用组配置)
 Proxy_first: &Proxy_first {type: select, proxies: [🚀 节点选择, 🇭🇰 香港节点, 🇸🇬 狮城节点, 🇯🇵 日本节点, 🇹🇼 台湾节点, 🇺🇲 美国节点, 🇰🇷 韩国节点, 🇲🇾 亚洲节点, 🇪🇺 欧洲节点, ♻️ 自动选择, 🔯 故障转移, 🎯 全球直连]}
 Direct_first: &Direct_first {type: select, proxies: [🎯 全球直连, 🇭🇰 香港节点, 🇸🇬 狮城节点, 🇯🇵 日本节点, 🇹🇼 台湾节点, 🇺🇲 美国节点, ♻️ 自动选择]}
 Include_all: &Include_all {type: select, proxies: [🚀 节点选择, 🇭🇰 香港节点, 🇸🇬 狮城节点, 🇯🇵 日本节点, 🇹🇼 台湾节点, 🇺🇲 美国节点, 🇰🇷 韩国节点, 🇲🇾 亚洲节点, 🇪🇺 欧洲节点, ♻️ 自动选择, 🔯 故障转移, 🎯 全球直连], include-all: true, exclude-filter: "(?i)(DIRECT|直连)"}
@@ -27,7 +26,7 @@ proxy-providers:
 
 # 全局配置
 mixed-port: 7890
-ipv6: false                          # ✅ 关闭以防泄漏
+ipv6: true                          
 allow-lan: true
 unified-delay: true
 geodata-mode: true                   # ✅ 匹配 .metadb 格式
@@ -36,23 +35,14 @@ find-process-mode: strict
 profile:
   store-selected: true
   store-fake-ip: true                
-tun:
-  enable: true
-  stack: system      # 或 gvisor/mixed，根据内核支持选择
-  auto-route: true   # 自动接管系统路由
-  auto-detect-interface: true
-  dns-hijack:
-    - any:53         # 劫持所有 DNS 请求，强制走 Clash
-  strict-route: true # 🔒 严格模式：非代理流量直接丢弃（高级防泄漏）
-
 dns:
   enable: true
   listen: 127.0.0.1:1053
   cache-algorithm: arc
   ipv6: true
   prefer-h3: false # DOH 优先使用 http/3
-  use-hosts: true # 是否回应配置中的 hosts，默认 true
-  use-system-hosts: false # 是否查询系统 hosts，默认 true，我们不用系统 hosts
+  use-hosts: true 
+  use-system-hosts: false 
   enhanced-mode: fake-ip  
   fake-ip-range: 198.18.0.1/16
   fake-ip-range6: fdfe:dcba:9876::1/64
@@ -153,16 +143,10 @@ rules:
   - RULE-SET,steamcdn_ip,🎯 全球直连,no-resolve
   
   # 🔵 兜底
-  - GEOSITE,category-games@cn,🎯 全球直连
   - GEOSITE,private,🎯 全球直连
-  - GEOSITE,category-communication,🚀 节点选择
-  - GEOSITE,category-social-media-!cn,🚀 节点选择
-  - GEOSITE,category-ai-!cn,🚀 节点选择
-  - GEOSITE,github,🚀 节点选择
   - GEOSITE,steam,🚀 节点选择
   - GEOSITE,google-cn,🎯 全球直连
   - GEOSITE,CN,🎯 全球直连
-  - GEOSITE,category-ads-all,🛑 广告拦截
   - GEOIP,CN,🎯 全球直连,no-resolve
   - GEOIP,private,🎯 全球直连,no-resolve
   - GEOIP,telegram,🚀 节点选择,no-resolve
@@ -199,6 +183,7 @@ rule-providers:
   private_domain: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/private.mrs" }
   microsoft_cn_domain: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/microsoft-cn.mrs" }
   tld_proxy: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/tld-proxy.mrs" }
+
 
 
 
