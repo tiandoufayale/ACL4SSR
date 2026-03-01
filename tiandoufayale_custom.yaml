@@ -25,7 +25,8 @@ proxy-providers:
       skip-cert-verify: true
 
 # 全局配置
-mixed-port: 7890                         
+mixed-port: 7890 
+ipv6: true
 allow-lan: true
 unified-delay: true
 geodata-mode: true                   # ✅ 匹配 .metadb 格式
@@ -38,7 +39,7 @@ dns:
   enable: true
   listen: 127.0.0.1:1053
   cache-algorithm: arc
-  ipv6: false
+  ipv6: true
   prefer-h3: false 
   use-hosts: true 
   use-system-hosts: false 
@@ -57,7 +58,7 @@ dns:
     - ntp.*.com
     - +.stun.*.* 
   default-nameserver:
-    - 223.5.5.5
+    - tls://223.5.5.5
     
     
   # 代理服务器域名的解析，必须走国内 DNS 确保能连上节点
@@ -70,15 +71,14 @@ dns:
          
   nameserver-policy:
     "geosite:geolocation-!cn":
-    - https://cloudflare-dns.com/dns-query
     - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
     "geosite:cn":
     - https://dns.alidns.com/dns-query
 
   fallback:
-    - https://https://cloudflare-dns.com/dns-query
     - https://dns.google/dns-query
-
+    - https://cloudflare-dns.com/dns-query
   fallback-filter:
     geoip: true
     geoip-code: CN
@@ -88,7 +88,7 @@ dns:
       - +.google.com
       - +.facebook.com
       - +.youtube.com
-  respect-rules: true # 【核心】必须为 true，确保 DNS 请求本身也走代理规则，防止运营商看到你在查什么
+  respect-rules: true
 # 策略组
 proxy-groups:
   - {name: 🚀 节点选择, type: select,no-resolve: true,proxies: [♻️ 自动选择, 🔯 故障转移, 🇭🇰 香港节点, 🇸🇬 狮城节点, 🇯🇵 日本节点, 🇹🇼 台湾节点, 🇺🇲 美国节点, 🇰🇷 韩国节点, 🇲🇾 亚洲节点, 🇪🇺 欧洲节点, 🚀 手动切换, 🎯 全球直连], icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/select.png"}
@@ -182,6 +182,7 @@ rule-providers:
   private_domain: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/private.mrs" }
   microsoft_cn_domain: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/microsoft-cn.mrs" }
   tld_proxy: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/tld-proxy.mrs" }
+
 
 
 
