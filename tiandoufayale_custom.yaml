@@ -58,7 +58,7 @@ dns:
     - ntp.*.com
     - +.stun.*.* 
   default-nameserver:
-    - tls://223.5.5.5
+    - 223.5.5.5
     
     
   # 代理服务器域名的解析，必须走国内 DNS 确保能连上节点
@@ -182,6 +182,7 @@ rule-providers:
   private_domain: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/private.mrs" }
   microsoft_cn_domain: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/microsoft-cn.mrs" }
   tld_proxy: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/tld-proxy.mrs" }
+
 
 
 
