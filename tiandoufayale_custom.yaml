@@ -23,16 +23,14 @@ proxy-providers:
     override:
       additional-prefix: '[机场 1]'
       skip-cert-verify: true
-      tfo: true
-      mptcp: true
 
 # 全局配置
 mixed-port: 7890 
 ipv6: true
 allow-lan: true
 unified-delay: true
-geodata-mode: true                   # ✅ 匹配 .metadb 格式
 tcp-concurrent: true
+inbound-tfo: true
 find-process-mode: strict
 profile:
   store-selected: true
@@ -50,6 +48,7 @@ dns:
   fake-ip-range6: fdfe:dcba:9876::1/64
   fake-ip-filter-mode: blacklist 
   fake-ip-filter:
+    - "rule-set:fakeip_filter_domain,private_domain,cn_domain"
     - +.lan
     - +.local
     - +.arpa
@@ -117,7 +116,7 @@ proxy-groups:
 rules:
   # 🔴 广告拦截
   - RULE-SET,banAd_domain,🛑 广告拦截
-  # - RULE-SET,banAd2_domain,🛑 广告拦截
+  - RULE-SET,banAd2_domain,🛑 广告拦截
   
   # 🟡 域名规则
   - RULE-SET,private_domain,🎯 全球直连
@@ -162,7 +161,7 @@ rule-anchor:
 
 rule-providers:
   banAd_domain: { <<: *domain, url: "https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/Filters/AWAvenue-Ads-Rule-Clash.mrs" }
-  : { <<: *domain, url: "https://raw.githubusercontent.com/privacy-protection-tools/anti-ad.github.io/master/docs/mihomo.mrs" }
+  banAd2_domain: { <<: *domain, url: "https://raw.githubusercontent.com/privacy-protection-tools/anti-ad.github.io/master/docs/mihomo.mrs" }
   fakeip_filter_domain: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/fakeip-filter-lite.mrs" }
   speedtest_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/ookla-speedtest.mrs" }
   Cloudflare_domain: { <<: *ip, url: "https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geoip/cloudflare.mrs" }
@@ -184,6 +183,7 @@ rule-providers:
   private_domain: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/private.mrs" }
   microsoft_cn_domain: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/microsoft-cn.mrs" }
   tld_proxy: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/tld-proxy.mrs" }
+
 
 
 
