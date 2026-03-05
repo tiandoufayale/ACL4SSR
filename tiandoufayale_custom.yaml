@@ -119,6 +119,7 @@ rules:
   - RULE-SET,steamcdn_domain,🎯 全球直连    # 保证 Steam 下载走国内 CDN
   - RULE-SET,microsoft_cn_domain,🎯 全球直连 # 保证微软国内服务不绕路
   - RULE-SET,games_cn_domain,🎯 全球直连
+  - RULE-SET,socialmedia-cn,🎯 全球直连
 
   # 🔵 4. 具体应用/网站分流 (明确需要代理或特殊处理的服务)
   - RULE-SET,ai_domain,💬 Ai平台
@@ -161,7 +162,7 @@ rule-anchor:
   domain: &domain {type: http, interval: 86400, behavior: domain, format: mrs}
 
 rule-providers:
-  banAd_domain: { <<: *domain, url: "https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/Filters/AWAvenue-Ads-Rule-Clash.mrs" }
+  banAd_domain: { <<: *domain, url: "https://github.com/HenryChiao/MIHOMO_YAMLS/raw/refs/heads/ruleset/stash/domain/adrules.mrs" }
   banAd2_domain: { <<: *domain, url: "https://raw.githubusercontent.com/privacy-protection-tools/anti-ad.github.io/master/docs/mihomo.mrs" }
   fakeip_filter_domain: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/fakeip-filter-lite.mrs" }
   Cloudflare_domain: { <<: *ip, url: "https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geoip/cloudflare.mrs" }
@@ -183,6 +184,9 @@ rule-providers:
   microsoft_cn_domain: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/microsoft-cn.mrs" }
   tld_proxy: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/tld-proxy.mrs" }
   google: { <<: *ip, url: "https://github.com/Loyalsoldier/geoip/raw/refs/heads/release/mrs/google.mrs" }
+  socialmedia-cn: { <<: *domain, url: "https://github.com/HenryChiao/MIHOMO_YAMLS/raw/refs/heads/ruleset/meta/domain/socialmedia-cn.mrs" }
+  
+
 
 
 
