@@ -23,6 +23,8 @@ proxy-providers:
     override:
       additional-prefix: '[机场 1]'
       skip-cert-verify: true
+      tfo: true
+      mptcp: true
 
 # 全局配置
 mixed-port: 7890 
@@ -181,6 +183,7 @@ rule-providers:
   microsoft_cn_domain: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/microsoft-cn.mrs" }
   tld_proxy: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/tld-proxy.mrs" }
   google: { <<: *ip, url: "https://github.com/Loyalsoldier/geoip/raw/refs/heads/release/mrs/google.mrs" }
+
 
 
 
