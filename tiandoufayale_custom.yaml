@@ -92,15 +92,11 @@ dns:
 # 策略组
 proxy-groups:
   - {name: 🚀 节点选择, type: select,no-resolve: true,proxies: [♻️ 自动选择, 🔯 故障转移, 🇭🇰 香港节点, 🇸🇬 狮城节点, 🇯🇵 日本节点, 🇹🇼 台湾节点, 🇺🇲 美国节点, 🇰🇷 韩国节点, 🇲🇾 亚洲节点, 🇪🇺 欧洲节点, 🚀 手动切换, 🎯 全球直连], icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/select.png"}
-  - {name: STEAM,type: select, <<: *Include_all, icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/steam.png"}
   - {name: 📲 电报消息, <<: *Proxy_first, icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/telegram.png"}
-  - {name: 🐦 推特分流, <<: *Proxy_first, icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/twitter.png"}
   - {name: 💬 Ai平台, type: select, proxies: [🇭🇰 香港节点, 🇸🇬 狮城节点, 🇯🇵 日本节点, 🇹🇼 台湾节点, 🇺🇲 美国节点, 🇰🇷 韩国节点, 🇲🇾 亚洲节点, 🇪🇺 欧洲节点, 🚀 手动切换], icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/ai.png"}
-  - {name: 📹 油管视频, <<: *Proxy_first, icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/youtube.png"}
   - {name: 🎯 全球直连, type: select, proxies: [DIRECT, ♻️ 自动选择], icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/direct.png"}
   - {name: 🛑 广告拦截, type: select, proxies: [REJECT, DIRECT], icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/block.png"}
   - {name: 🐟 漏网之鱼, <<: *Proxy_first, icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/final.png"}
-  - {name: ☁️ CloudFlareCDN, type: select, proxies: [🚀 节点选择, 🎯 全球直连, 🐟 漏网之鱼]}
   - {name: 🚀 手动切换, type: select, include-all: true}
   - {name: ♻️ 自动选择, type: url-test, include-all: true, interval: 300, tolerance: 50}
   - {name: 🔯 故障转移, type: fallback, include-all: true, interval: 300}
@@ -127,11 +123,11 @@ rules:
 
   # 🔵 4. 具体应用/网站分流 (明确需要代理或特殊处理的服务)
   - RULE-SET,ai_domain,💬 Ai平台
-  - RULE-SET,youtube_domain,📹 油管视频
+  - RULE-SET,youtube_domain,🚀 节点选择
   - RULE-SET,github_domain,🚀 节点选择
   - RULE-SET,google,🚀 节点选择
-  - RULE-SET,steam_domain,STEAM
-  - RULE-SET,Cloudflare_domain,☁️ CloudFlareCDN
+  - RULE-SET,steam_domain,🚀 节点选择
+  - RULE-SET,Cloudflare_domain,🚀 节点选择
   - DOMAIN-SUFFIX,services.googleapis.cn,🚀 节点选择
   - DOMAIN-SUFFIX,xn--ngstr-lra8j.com,🚀 节点选择
 
@@ -144,7 +140,7 @@ rules:
   # 🟤 6. IP 规则（全部带 no-resolve，必须放在所有域名规则之后）
   # 这样做的目的是：如果前面的域名规则都没命中，才进行一次 DNS 解析来获取 IP，然后匹配这里的 IP 规则，大幅节省解析开销。
   - RULE-SET,telegram_ip,📲 电报消息,no-resolve
-  - RULE-SET,twitter_ip,🐦 推特分流,no-resolve
+  - RULE-SET,twitter_ip,🚀 节点选择,no-resolve
   - RULE-SET,private_ip,🎯 全球直连,no-resolve
   - RULE-SET,cn_ip,🎯 全球直连,no-resolve
   - RULE-SET,steamcdn_ip,🎯 全球直连,no-resolve
@@ -188,6 +184,7 @@ rule-providers:
   microsoft_cn_domain: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/microsoft-cn.mrs" }
   tld_proxy: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/tld-proxy.mrs" }
   google: { <<: *ip, url: "https://github.com/Loyalsoldier/geoip/raw/refs/heads/release/mrs/google.mrs" }
+
 
 
 
