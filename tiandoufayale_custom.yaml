@@ -107,7 +107,6 @@ proxy-groups:
   - {name: 🇲🇾 亚洲节点, <<: *Urltest_Base, include-all: true, filter: "(?i)(马来|泰国|越南|VN|KR|Korea|KOR|首尔|韩|台|🇹🇼|TW|Taiwan|新|🇸🇬|SG|Singapore)"}
   - {name: 🇪🇺 欧洲节点, <<: *Urltest_Base, include-all: true, filter: "(?i)(英国|德国|卢森堡|法国|俄罗斯|France|Deutschland|United Kingdom|Italy|Netherland)"}
 rules:
-  - AND,((NETWORK,UDP),(DST-PORT,443)),REJECT
   # 🔴 1. 广告拦截 (最高优先级，遇到垃圾直接干掉)
   - RULE-SET,banAd_domain,🛑 广告拦截
   - RULE-SET,banAd2_domain,🛑 广告拦截
@@ -120,16 +119,20 @@ rules:
   - RULE-SET,microsoft_cn_domain,🎯 全球直连 # 保证微软国内服务不绕路
   - RULE-SET,games_cn_domain,🎯 全球直连
   - RULE-SET,socialmedia-cn,🎯 全球直连
+  - RULE-SET,ai_cn_domain,🎯 全球直连
 
   # 🔵 4. 具体应用/网站分流 (明确需要代理或特殊处理的服务)
   - RULE-SET,ai_domain,💬 Ai平台
+  - RULE-SET,openai_domain,💬 Ai平台
   - RULE-SET,youtube_domain,🚀 节点选择
   - RULE-SET,github_domain,🚀 节点选择
+  - RULE-SET,telegram_domain,🚀 节点选择
   - RULE-SET,google,🚀 节点选择
   - RULE-SET,steam_domain,🚀 节点选择
   - RULE-SET,Cloudflare_domain,🚀 节点选择
   - DOMAIN-SUFFIX,services.googleapis.cn,🚀 节点选择
   - DOMAIN-SUFFIX,xn--ngstr-lra8j.com,🚀 节点选择
+  
 
   # 🟣 5. 大范围通用域名分流 (CN 必须在前，Proxy 和 GFW 在后，防止误判)
   - RULE-SET,cn_domain,🎯 全球直连
@@ -172,6 +175,7 @@ rule-providers:
   github_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/github.mrs" }
   cn_domain: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/cn.mrs" }
   gfw_domain: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/gfw.mrs" }
+  telegram_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/telegram.mrs" }
   telegram_ip: { <<: *ip, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/telegramip.mrs" }
   twitter_ip: { <<: *ip, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/twitter.mrs" }
   cn_ip: { <<: *ip, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/cnip.mrs" }
@@ -185,7 +189,10 @@ rule-providers:
   tld_proxy: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/tld-proxy.mrs" }
   google: { <<: *ip, url: "https://github.com/Loyalsoldier/geoip/raw/refs/heads/release/mrs/google.mrs" }
   socialmedia-cn: { <<: *domain, url: "https://github.com/HenryChiao/MIHOMO_YAMLS/raw/refs/heads/ruleset/meta/domain/socialmedia-cn.mrs" }
+  ai_cn_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/category-ai-cn.mrs" }
+  openai_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/openai.mrs" }
   
+
 
 
 
