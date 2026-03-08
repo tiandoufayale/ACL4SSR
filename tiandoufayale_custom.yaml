@@ -54,19 +54,20 @@ dns:
   enhanced-mode: fake-ip  
   fake-ip-range: 198.18.0.1/16
   fake-ip-range6: fdfe:dcba:9876::1/64
-  fake-ip-filter-mode: rule
+  fake-ip-filter-mode: blacklist 
   fake-ip-filter:
-    - RULE-SET,banAd_domain,fake-ip
-    - RULE-SET,private_domain,real-ip
-    - RULE-SET,ai_domain,fake-ip
-    - RULE-SET,microsoft_cn_domain,real-ip
-    - RULE-SET,games_cn_domain,real-ip
-    - RULE-SET,direct_domain,real-ip
-    - RULE-SET,proxy_domain,fake-ip
-    - RULE-SET,cn_domain,real-ip
-    - MATCH,fake-ip
+    - "rule-set:fakeip_filter_domain,private_domain,cn_domain"
+    - +.lan
+    - +.local
+    - +.arpa
+    - +.internal
+    - +.localhost
+    - +.market.xiaomi.com
+    - time.*.com
+    - ntp.*.com
+    - +.stun.*.* 
   default-nameserver:
-    - 223.5.5.5
+    - 119.29.29.29
 # 代理服务器域名的解析，必须走国内 DNS 确保能连上节点
   proxy-server-nameserver:
     - https://dns.alidns.com/dns-query
@@ -134,16 +135,6 @@ rules:
   - RULE-SET,private_ip,🎯 全球直连,no-resolve
   - RULE-SET,cn_ip,🎯 全球直连,no-resolve
   - RULE-SET,steamcdn_ip,🎯 全球直连,no-resolve
-  
-  # ⚫ 7. 兜底与 Geo 数据 (作为 Rule-Set 未命中的最后补充)
-  - GEOSITE,private,🎯 全球直连
-  - GEOSITE,steam,🚀 节点选择
-  - GEOSITE,CN,🎯 全球直连
-  - GEOIP,CN,🎯 全球直连,no-resolve
-  - GEOIP,private,🎯 全球直连,no-resolve
-  - GEOIP,telegram,🚀 节点选择,no-resolve
-  - GEOIP,twitter,🚀 节点选择,no-resolve
-  - GEOIP,google,🚀 节点选择,no-resolve
   - MATCH,🐟 漏网之鱼
 
 # 规则集定义
@@ -152,6 +143,7 @@ rule-anchor:
   domain: &domain {type: http, interval: 86400, behavior: domain, format: mrs}
 
 rule-providers:
+  fakeip_filter_domain: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/fakeip-filter-lite.mrs" }
   banAd_domain: { <<: *domain, url: "https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/Filters/AWAvenue-Ads-Rule-Clash.mrs" }
   Cloudflare_domain: { <<: *ip, url: "https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geoip/cloudflare.mrs" }
   proxy_domain: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/proxy.mrs" }
@@ -177,6 +169,7 @@ rule-providers:
   ai_cn_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/category-ai-cn.mrs" }
   openai_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/openai.mrs" }
   direct_domain: { <<: *domain, url: "https://cdn.gh-proxy.org/https://raw.githubusercontent.com/echs-top/proxy/main/rules/mrs/direct_domain.mrs" }
+
 
 
 
