@@ -82,7 +82,6 @@ proxy-groups:
   - {name: 🐟 漏网之鱼, <<: *Proxy_first, icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/final.png"}
   - {name: 🚀 手动切换, type: select, include-all: true}
   - {name: ♻️ 自动选择, type: url-test, include-all: true, interval: 300, tolerance: 50}
-  - {name: 🔯 故障转移, type: fallback, include-all: true, interval: 300}
   - {name: 🇭🇰 香港节点, <<: *Urltest_Base, include-all: true, filter: "(?i)(港|HK|hk|Hong Kong|🇭🇰)", icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/Hongkong.png"}
   - {name: 🇯🇵 日本节点, <<: *Urltest_Base, include-all: true, filter: "(?i)(日本|🇯🇵|JP|Japan)", icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/Japan.png"}
   - {name: 🇺🇲 美国节点, <<: *Urltest_Base, include-all: true, filter: "(?i)(美国|美|🇺🇲|🇺🇸|US|America|United States)", icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/America.png"}
@@ -172,6 +171,7 @@ rule-providers:
   openai_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/openai.mrs" }
   direct_domain: { <<: *domain, url: "https://cdn.gh-proxy.org/https://raw.githubusercontent.com/echs-top/proxy/main/rules/mrs/direct_domain.mrs" }
   google-cn: { <<: *domain, url: "https://cdn.gh-proxy.org/https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/google-cn.mrs"}
+
 
 
 
