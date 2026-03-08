@@ -33,7 +33,8 @@ tcp-concurrent: true
 find-process-mode: strict
 profile:
   store-selected: true
-  store-fake-ip: true  
+  store-fake-ip: true
+  
 dns:
   enable: true
   listen: 127.0.0.1:1053
@@ -46,17 +47,17 @@ dns:
   enhanced-mode: fake-ip  
   fake-ip-range: 198.18.0.1/16
   fake-ip-range6: fdfe:dcba:9876::1/64
-  fake-ip-filter-mode: blacklist
-    - "rule-set:fakeip_filter_domain,private_domain,cn_domain"
-    - +.lan
-    - +.local
-    - +.arpa
-    - +.internal
-    - +.localhost
-    - +.market.xiaomi.com
-    - time.*.com
-    - ntp.*.com
-    - +.stun.*.* 
+fake-ip-filter-mode: rule
+fake-ip-filter:
+    - RULE-SET,banAd_domain,fake-ip
+    - RULE-SET,private_domain,real-ip
+    - RULE-SET,ai_domain,fake-ip
+    - RULE-SET,microsoft_cn_domain,real-ip
+    - RULE-SET,games_cn_domain,real-ip
+    - RULE-SET,direct_domain,real-ip
+    - RULE-SET,proxy_domain,fake-ip
+    - RULE-SET,cn_domain,real-ip
+    - MATCH,fake-ip
   default-nameserver:
     - 223.5.5.5
 # 代理服务器域名的解析，必须走国内 DNS 确保能连上节点
@@ -171,6 +172,7 @@ rule-providers:
   openai_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/openai.mrs" }
   direct_domain: { <<: *domain, url: "https://cdn.gh-proxy.org/https://raw.githubusercontent.com/echs-top/proxy/main/rules/mrs/direct_domain.mrs" }
   google-cn: { <<: *domain, url: "https://cdn.gh-proxy.org/https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/google-cn.mrs"}
+
 
 
 
