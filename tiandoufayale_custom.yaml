@@ -26,7 +26,7 @@ proxy-providers:
 
 # 全局配置
 mixed-port: 7890 
-ipv6: false
+ipv6: true
 allow-lan: true
 unified-delay: true
 tcp-concurrent: true
@@ -34,19 +34,11 @@ find-process-mode: strict
 profile:
   store-selected: true
   store-fake-ip: true
-tun:
-  enable: true
-  stack: system
-  auto-route: true
-  auto-redirect: true
-  auto-detect-interface: true
-  strict-route: true
-  disable-icmp-forwarding: true
 dns:
   enable: true
   listen: 127.0.0.1:1053
   cache-algorithm: arc
-  ipv6: false
+  ipv6: true
   prefer-h3: false 
   respect-rules: true
   use-hosts: true 
@@ -76,8 +68,8 @@ dns:
     - https://doh.pub/dns-query
   nameserver-policy:
     "geosite:geolocation-!cn":
-      - "https://dns.google/dns-query#🚀 节点选择"
-      - "https://cloudflare-dns.com/dns-query#🚀 节点选择"
+      - https://dns.google/dns-query
+      - https://cloudflare-dns.com/dns-query
     "geosite:cn":
       - https://dns.alidns.com/dns-query
       - https://doh.pub/dns-query
@@ -96,20 +88,18 @@ proxy-groups:
   - {name: 🇺🇲 美国节点, <<: *Urltest_Base, include-all: true, filter: "(?i)(美国|美|🇺🇲|🇺🇸|US|America|United States)", icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/America.png"}
   - {name: 🇲🇾 亚洲节点, <<: *Urltest_Base, include-all: true, filter: "(?i)(马来|泰国|越南|VN|KR|Korea|KOR|首尔|韩|台|🇹🇼|TW|Taiwan|新|🇸🇬|SG|Singapore)"}
   - {name: 🇪🇺 欧洲节点, <<: *Urltest_Base, include-all: true, filter: "(?i)(英国|德国|卢森堡|法国|俄罗斯|France|Deutschland|United Kingdom|Italy|Netherland)"}
-  - {name: 🛑 广告拦截, type: select, proxies: [REJECT, DIRECT], icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/block.png"}
 rules:
   - AND,((NETWORK,UDP),(DST-PORT,443)),REJECT 
-  - RULE-SET,banAd_domain,🛑 广告拦截
   # 🟡 2. 局域网与私有网络 (防止内网 IP 和域名发生 DNS 泄露)
   - RULE-SET,private_domain,🎯 全球直连
-
   # 🟢 3. 国内特色服务特判 (极其重要：国内直连特例，必须在广义规则之前！)
   - RULE-SET,steamcdn_domain,🎯 全球直连    # 保证 Steam 下载走国内 CDN
   - RULE-SET,microsoft_cn_domain,🎯 全球直连 # 保证微软国内服务不绕路
   - RULE-SET,games_cn_domain,🎯 全球直连
   - RULE-SET,socialmedia-cn,🎯 全球直连
   - RULE-SET,ai_cn_domain,🎯 全球直连
-
+  - RULE-SET,cn_domain,🎯 全球直连
+  - RULE-SET,direct_domain,🎯 全球直连
   # 🔵 4. 具体应用/网站分流 (明确需要代理或特殊处理的服务)
   - RULE-SET,ai_domain,💬 Ai平台
   - RULE-SET,openai_domain,💬 Ai平台
@@ -122,8 +112,6 @@ rules:
   - DOMAIN-SUFFIX,services.googleapis.cn,🚀 节点选择
   - DOMAIN-SUFFIX,xn--ngstr-lra8j.com,🚀 节点选择
   # 🟣 5. 大范围通用域名分流 (CN 必须在前，Proxy 和 GFW 在后，防止误判)
-  - RULE-SET,cn_domain,🎯 全球直连
-  - RULE-SET,direct_domain,🎯 全球直连
   - RULE-SET,proxy_domain,🚀 节点选择
   - RULE-SET,gfw_domain,🚀 节点选择
   - RULE-SET,tld_proxy,🚀 节点选择
@@ -144,7 +132,6 @@ rule-anchor:
 
 rule-providers:
   fakeip_filter_domain: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/fakeip-filter-lite.mrs" }
-  banAd_domain: { <<: *domain, url: "https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/Filters/AWAvenue-Ads-Rule-Clash.mrs" }
   Cloudflare_domain: { <<: *ip, url: "https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geoip/cloudflare.mrs" }
   proxy_domain: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/proxy.mrs" }
   ai_domain: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/ai.mrs" }
@@ -169,6 +156,7 @@ rule-providers:
   ai_cn_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/category-ai-cn.mrs" }
   openai_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/openai.mrs" }
   direct_domain: { <<: *domain, url: "https://cdn.gh-proxy.org/https://raw.githubusercontent.com/echs-top/proxy/main/rules/mrs/direct_domain.mrs" }
+
 
 
 
