@@ -87,7 +87,6 @@ proxy-groups:
   - {name: 🇲🇾 亚洲节点, <<: *Urltest_Base, include-all: true, filter: "(?i)(马来|泰国|越南|VN|KR|Korea|KOR|首尔|韩|台|🇹🇼|TW|Taiwan|新|🇸🇬|SG|Singapore)"}
   - {name: 🇪🇺 欧洲节点, <<: *Urltest_Base, include-all: true, filter: "(?i)(英国|德国|卢森堡|法国|俄罗斯|France|Deutschland|United Kingdom|Italy|Netherland)"}
 rules:
-  - AND,((NETWORK,UDP),(DST-PORT,443)),REJECT 
   # 🟡 2. 局域网与私有网络 (防止内网 IP 和域名发生 DNS 泄露)
   - RULE-SET,private_domain,🎯 全球直连
   # 🟢 3. 国内特色服务特判 (极其重要：国内直连特例，必须在广义规则之前！)
@@ -96,15 +95,24 @@ rules:
   - RULE-SET,games_cn_domain,🎯 全球直连
   - RULE-SET,ai_cn_domain,🎯 全球直连
   - RULE-SET,cn_domain,🎯 全球直连
+  - RULE-SET,google-cn,🎯 全球直连
   - RULE-SET,google,Google,no-resolve
-  - AND,((NETWORK,UDP),(DST-PORT,443)),REJECT 
-  # 🔵 4. 具体应用/网站分流 (明确需要代理或特殊处理的服务)
-  - RULE-SET,ai_domain,💬 Ai平台
-  - RULE-SET,openai_domain,💬 Ai平台
+  - RULE-SET,proxy_domain,🚀 节点选择
   - RULE-SET,youtube_domain,🚀 节点选择
   - RULE-SET,telegram_domain,🚀 节点选择
   - RULE-SET,Cloudflare_domain,🚀 节点选择,no-resolve
-  # 🟣 5. 大范围通用域名分流 (CN 必须在前，Proxy 和 GFW 在后，防止误判)
+  - AND,((NETWORK,UDP),(DST-PORT,443)),REJECT 
+  - RULE-SET,ai_domain,💬 Ai平台
+  - RULE-SET,openai_domain,💬 Ai平台
+
+  - RULE-SET,telegram_ip,📲 电报消息,no-resolve
+  - RULE-SET,twitter_ip,🚀 节点选择,no-resolve
+  - RULE-SET,private_ip,🎯 全球直连,no-resolve
+  - RULE-SET,cn_ip,🎯 全球直连,no-resolve
+  - RULE-SET,steamcdn_ip,🎯 全球直连,no-resolve
+  - GEOIP,google,Google,no-resolve
+  - GEOIP,CN,🎯 全球直连,no-resolve
+  
   - MATCH,🐟 漏网之鱼
 
 # 规则集定义
@@ -128,6 +136,15 @@ rule-providers:
   google: { <<: *ip, url: "https://github.com/Loyalsoldier/geoip/raw/refs/heads/release/mrs/google.mrs" }
   ai_cn_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/category-ai-cn.mrs" }
   openai_domain: { <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/openai.mrs" }
+  proxy_domain: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/proxy.mrs" }
+  telegram_ip: { <<: *ip, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/telegramip.mrs" }
+  twitter_ip: { <<: *ip, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/twitter.mrs" }
+  cn_ip: { <<: *ip, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/cnip.mrs" }
+  private_ip: { <<: *ip, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/privateip.mrs" }
+  steamcdn_ip: { <<: *ip, url: "https://raw.githubusercontent.com/Lanlan13-14/Rules/refs/heads/main/rules/IP/steamCDN-ip.mrs" }
+  google-cn: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/google-cn.mrs" }
+  
+
 
 
 
