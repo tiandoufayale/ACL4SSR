@@ -94,9 +94,10 @@ rules:
   - RULE-SET,microsoft_cn_domain,🎯 全球直连 # 保证微软国内服务不绕路
   - RULE-SET,games_cn_domain,🎯 全球直连
   - RULE-SET,ai_cn_domain,🎯 全球直连
-  - RULE-SET,cn_domain,🎯 全球直连
   - RULE-SET,google-cn,Google
   - RULE-SET,google,Google,no-resolve
+  - GEOIP,google,Google,no-resolve
+  - RULE-SET,cn_domain,🎯 全球直连
   - RULE-SET,proxy_domain,🚀 节点选择
   - RULE-SET,youtube_domain,🚀 节点选择
   - RULE-SET,telegram_domain,🚀 节点选择
@@ -104,13 +105,11 @@ rules:
   - AND,((NETWORK,UDP),(DST-PORT,443)),REJECT 
   - RULE-SET,ai_domain,💬 Ai平台
   - RULE-SET,openai_domain,💬 Ai平台
-
   - RULE-SET,telegram_ip,📲 电报消息,no-resolve
   - RULE-SET,twitter_ip,🚀 节点选择,no-resolve
   - RULE-SET,private_ip,🎯 全球直连,no-resolve
   - RULE-SET,cn_ip,🎯 全球直连,no-resolve
   - RULE-SET,steamcdn_ip,🎯 全球直连,no-resolve
-  - GEOIP,google,Google,no-resolve
   - GEOIP,CN,🎯 全球直连,no-resolve
   
   - MATCH,🐟 漏网之鱼
@@ -144,6 +143,7 @@ rule-providers:
   steamcdn_ip: { <<: *ip, url: "https://raw.githubusercontent.com/Lanlan13-14/Rules/refs/heads/main/rules/IP/steamCDN-ip.mrs" }
   google-cn: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/google-cn.mrs" }
   
+
 
 
 
