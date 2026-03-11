@@ -95,7 +95,7 @@ rules:
   - RULE-SET,games_cn_domain,🎯 全球直连
   - RULE-SET,ai_cn_domain,🎯 全球直连
   - RULE-SET,cn_domain,🎯 全球直连
-  - RULE-SET,google-cn,🎯 全球直连
+  - RULE-SET,google-cn,Google
   - RULE-SET,google,Google,no-resolve
   - RULE-SET,proxy_domain,🚀 节点选择
   - RULE-SET,youtube_domain,🚀 节点选择
@@ -144,6 +144,7 @@ rule-providers:
   steamcdn_ip: { <<: *ip, url: "https://raw.githubusercontent.com/Lanlan13-14/Rules/refs/heads/main/rules/IP/steamCDN-ip.mrs" }
   google-cn: { <<: *domain, url: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/google-cn.mrs" }
   
+
 
 
 
